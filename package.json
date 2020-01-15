@@ -1,5 +1,5 @@
 {
-  "name": "express-boilerplate",
+  "name": "tennit-server",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
@@ -8,7 +8,9 @@
     "start": "node src/server.js",
     "dev": "nodemon src/server.js",
     "predeploy": "npm audit",
-    "deploy": "git push heroku master"
+    "deploy": "git push heroku master",
+    "lazypush": "git add . && git commit -m 'fixes' && git push origin master"
+
   },
   "keywords": [],
   "author": "",
@@ -20,7 +22,8 @@
     "express": "^4.17.1",
     "helmet": "^3.21.2",
     "morgan": "^1.9.1",
-    "ndb": "^1.1.5"
+    "ndb": "^1.1.5",
+    "winston": "^3.2.1"
   },
   "devDependencies": {
     "chai": "^4.2.0",
