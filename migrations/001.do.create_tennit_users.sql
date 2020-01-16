@@ -4,8 +4,6 @@ CREATE TABLE tennit_users (
     password TEXT NOT NULL,
     firstName TEXT NOT NULL,
     lastName TEXT NOT NULL,
-    gender TEXT NOT NULL,
-    prefGender TEXT NOT NULL,
     age INTEGER NOT NULL,
     provence TEXT NOT NULL,
     city TEXT NOT NULL,

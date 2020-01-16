@@ -7,12 +7,12 @@ TRUNCATE
     tennit_comments
     RESTART IDENTITY CASCADE;
 
-INSERT INTO tennit_users (email, password, firstName, lastName, gender, prefGender, age, provence, city, neighborhood, rent, listing, userBlurb, blurb)
+INSERT INTO tennit_users (email, password, firstName, lastName, userGender, prefGender, age, provence, city, neighborhood, rent, listing, userBlurb, blurb)
 VALUES
-    ('john@email.com','AAaa11!!','John','Johnson','male','female',20,'Ontario','Toronto','Leaside',1000, TRUE,'i am user!''this is setting description!'),
+    ('john@email.com','AAaa11!!','John','Johnson','male','female',20,'Ontario','Toronto','Leaside',1000, TRUE,'i am user!','this is setting description!'),
     ('susan@email.com','AAaa11!!','Susan','Susanson','female','male',20,'Ontario','Toronto','The Annex',1001, TRUE,'i am user!','this is setting description!'),
-    ('gertrude@email.com','AAaa11!!','Gertrude','Gertrudeson','female','male','Ontario','Mississauga','Clarkson',1500, TRUE,'i am user!','this is setting description!'),
-    ('margret@email.com','AAaa11!!','Margret','Margretson','female','male','Ontario','Toronto','Yorkdale',700, FALSE, 'i am user!','this is setting description!',);
+    ('gertrude@email.com','AAaa11!!','Gertrude','Gertrudeson','female','male',20,'Ontario','Mississauga','Clarkson',1500, TRUE,'i am user!','this is setting description!'),
+    ('margret@email.com','AAaa11!!','Margret','Margretson','female','male',20,'Ontario','Toronto','Yorkdale',700, FALSE, 'i am user!','this is setting description!');
 
 INSERT INTO tennit_images (image, user_id)
 VALUES
@@ -28,7 +28,7 @@ VALUES
     (1,4,FALSE,TRUE),
     (2,4,TRUE,TRUE);
 
-INSERT INTO tennit_comments (convo_id, user_id, comment)
+INSERT INTO tennit_comments (match_id, user_id, comment)
 VALUES 
     (1,1,'blah blah blah'),
     (1,2,'blah blah blah'),
@@ -46,3 +46,5 @@ VALUES
     (4,4,'blah blah blah'),
     (4,2,'blah blah blah'),
     (4,4,'blah blah blah');
+
+COMMIT;

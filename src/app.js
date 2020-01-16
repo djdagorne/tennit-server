@@ -14,6 +14,13 @@ app.use(morgan(morganOption));
 app.use(helmet());
 app.use(cors());
 
+
+//app.use('/api/users', usersRouter) to get user data from db
+//app.use('/api/matches/', usersRouter) get match data from db
+//app.use('/api/images', usersRouter) get image links from db
+//app.use('/api/comments', usersRouter) get comment posts from db
+//app.use('/api/auth', usersRouter) auth
+
 const logger = winston.createLogger({
     level:'info',
     format: winston.format.json(),
@@ -49,7 +56,7 @@ app.use(function errorHandler(error, req, res, next) {
 
 
 app.get('/', (req, res) => {
-    console.log(req)
+    console.log('helloworld')
     res.send('Hello, World!')
 })
 
