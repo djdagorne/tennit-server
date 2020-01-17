@@ -51,27 +51,25 @@ describe(`UsersService object`, function(){
                 return UsersService.deleteUser(db, thirdId)
                     .then(()=>UsersService.getAllUsers(db))
                     .then(actual=>{
-                        console.log(actual)
                         expect(actual).to.eql(expected)
                     })
             })
         })
         describe(`updateUser()`,()=>{
             it(`updates user in 'tennit_users'`,()=>{
-                console.log('running updateUser test')
                 const thirdId = 3
                 const newUserData = {
-                    ...testUsers[2],
                     neighborhood: 'Updated',
                     rent: 700,
                 }
-                return UsersService.updateUser(knex, thirdId, newUserData)
+                const expectedData = {
+                    ...testUsers[2],
+                    ...newUserData
+                }
+                return UsersService.updateUser(db, thirdId, newUserData)
                     .then(()=> UsersService.getUserById(db, thirdId))
                     .then(user=>{
-                        expect(user).to.eql({
-                            id: thirdId,
-                            ...newUserData,
-                        })
+                        expect(user).to.eql(expectedData)
                     })
             })
         })
@@ -93,7 +91,7 @@ describe(`UsersService object`, function(){
                     usergender: 'female',
                     prefgender: 'female',
                     age: 20,
-                    provence: 'testy',
+                    province: 'testy',
                     city: 'testy',
                     neighborhood: 'tester',
                     rent: 700,
@@ -112,7 +110,7 @@ describe(`UsersService object`, function(){
                             usergender: 'female',
                             prefgender: 'female',
                             age: 20,
-                            provence: 'testy',
+                            province: 'testy',
                             city: 'testy',
                             neighborhood: 'tester',
                             rent: 700,

@@ -7,7 +7,7 @@ TRUNCATE
     tennit_comments
     RESTART IDENTITY CASCADE;
 
-INSERT INTO tennit_users (email, password, firstName, lastName, userGender, prefGender, age, provence, city, neighborhood, rent, listing, userBlurb, blurb)
+INSERT INTO tennit_users (email, password, firstname, lastname, usergender, prefgender, age, province, city, neighborhood, rent, listing, userblurb, blurb)
 VALUES
     ('john@email.com','AAaa11!!','John','Johnson','male','female',20,'Ontario','Toronto','Leaside',1000, TRUE,'i am user!','this is setting description!'),
     ('susan@email.com','AAaa11!!','Susan','Susanson','female','male',20,'Ontario','Toronto','The Annex',1001, TRUE,'i am user!','this is setting description!'),

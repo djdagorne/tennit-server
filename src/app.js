@@ -8,6 +8,8 @@ const winston = require('winston')
 
 const app = express();
 
+const UsersService = require('./users/users-service')
+
 const morganOption = (NODE_ENV === 'production') ? 'tiny' : 'common';
 
 app.use(morgan(morganOption));
@@ -15,7 +17,16 @@ app.use(helmet());
 app.use(cors());
 
 
-//app.use('/api/users', usersRouter) to get user data from db
+app.get('/api/users', (req,res,next)=>{
+    const knexInstance = req.app.get('db')
+    UsersService.getAllUsers(knexInstance)
+        .then(users=>{
+            res.json(users)
+        })
+        .catch(next)
+})
+
+//app.use('/api/users', usersRouter) to get user data from dbuser data from db
 //app.use('/api/matches/', usersRouter) get match data from db
 //app.use('/api/images', usersRouter) get image links from db
 //app.use('/api/comments', usersRouter) get comment posts from db

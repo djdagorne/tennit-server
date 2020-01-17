@@ -5,7 +5,7 @@ CREATE TABLE tennit_users (
     firstName TEXT NOT NULL,
     lastName TEXT NOT NULL,
     age INTEGER NOT NULL,
-    provence TEXT NOT NULL,
+    province TEXT NOT NULL,
     city TEXT NOT NULL,
     neighborhood TEXT,
     rent INTEGER, 

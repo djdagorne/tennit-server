@@ -21,8 +21,8 @@ const UsersService = {
     },
     updateUser(knex, id, newUserFields){
         return knex('tennit_users')
-            .where({ id })
-            .update({newUserFields})
+            .where({id})
+            .update(newUserFields)
     }
 }
 
