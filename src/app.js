@@ -6,6 +6,7 @@ const cors = require('cors');
 const { NODE_ENV } = require('./config')
 const winston = require('winston')
 const usersRouter = require('./users/users-router')
+const listingsRouter = require('./listings/listing-router')
 
 const app = express();
 
@@ -16,6 +17,7 @@ app.use(helmet());
 app.use(cors());
 
 app.use('/api/users', usersRouter)
+app.use('/api/listings', listingsRouter)
 
 
 //app.use('/api/users', usersRouter) to get user data from dbuser data from db

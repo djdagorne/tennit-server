@@ -6,6 +6,15 @@ const UsersService = {
     getAllUsers(knex){
         return knex.select('*').from('tennit_users')
     },
+    getUserById(knex, id){
+        return knex.from('tennit_users').select('*').where('id',id).first()
+    },
+    getAllListings(knex){
+        return knex.select('*').from('tennit_listings')
+    },
+    getListingById(knex, id){
+        return knex.from('tennit_listings').select('*').where('user_id',user_id).first()
+    },
     insertNewUser(knex, newUser){
         return knex
             .insert(newUser)
@@ -14,9 +23,6 @@ const UsersService = {
             .then(rows=>{
                 return rows[0]
             })
-    },
-    getUserById(knex, id){
-        return knex.from('tennit_users').select('*').where('id',id).first()
     },
     // getSearchResults(knex, province, city, neighborhood){
     //     return knex('tennit_users')
@@ -29,7 +35,7 @@ const UsersService = {
             .delete()
     },
     updateUser(knex, id, newUserFields){
-        return knex('tennit_users')
+        return knex('tennit_listings')
             .where({id})
             .update(newUserFields)
     },
@@ -53,18 +59,6 @@ const UsersService = {
             return `Password must contain 1 upper case, lower case, number and special character`
         }
         return null
-    },    
-    serializeUser(user){
-        return {
-            ...user,
-            firstname: xss(user.firstname),
-            lastname: xss(user.lastname),
-            province: xss(user.province),
-            city: xss(user.city),
-            neighborhood: xss(user.neighborhood),
-            userblurb: xss(user.userblurb),
-            blurb: xss(user.blurb),
-        }
     }
 }
 

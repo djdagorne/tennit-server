@@ -1,8 +1,7 @@
 
 const express = require('express')
-const xss = require('xss')
 const UsersService = require('./users-service')
-
+const helpers = require('../../test/test-helpers')
 const usersRouter = express.Router()
 const jsonParser = express.json()
 
@@ -30,7 +29,7 @@ usersRouter
         )
             .then(hasDupeEmail => {
                 if(hasDupeEmail){
-                    return res.status(400).json({error: { message: `Email already in use.` } })
+                    return res.status(400).json({error: { message: `Email already in use.` }})
                 }
                 return UsersService.insertNewUser(
                     req.app.get('db'),
@@ -40,7 +39,7 @@ usersRouter
                         res
                             .status(201)
                             .location(`/`)
-                            .json(UsersService.serializeUser(user))
+                            .json(user)
                     })
                     
             })
@@ -64,7 +63,7 @@ usersRouter
             .catch(next)
     })
     .get((req,res,next)=>{
-        res.json(UsersService.serializeUser(res.user))
+        res.json(res.user)
     })
     .delete((req,res,next)=>{
         UsersService.deleteUser(
@@ -75,6 +74,29 @@ usersRouter
                 res.status(204).end()
             })
             .catch(next)
+    })
+    .patch(jsonParser, (req,res,next)=>{
+        const newUserData = req.body;
+        const testUsers = helpers.makeUserArray()
+        const userKeys = Object.keys(testUsers[0])
+        for(const [key] of Object.entries(newUserData)){
+            if(userKeys.filter(sampleKey => sampleKey === key).length === 0){ //if each key of nUD doesnt match any of the testUser keys, delete the key from nUD
+                delete newUserData[key]
+            }
+        }
+        if(Object.keys(newUserData).length > 0){//after being pruned if nUD is empty, throw the error, or continue as usual
+            UsersService.updateUser(
+                req.app.get('db'),
+                req.params.user_id, 
+                newUserData
+            )
+                .then(rows => {
+                    res.status(204).end()
+                })
+                .catch(next)
+        }else{
+            return res.status(400).json({ error: {message: 'Request body must supply a correct field.'}})
+        }
     })
 
 module.exports = usersRouter;

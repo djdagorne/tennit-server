@@ -7,12 +7,19 @@ TRUNCATE
     tennit_comments
     RESTART IDENTITY CASCADE;
 
-INSERT INTO tennit_users (email, password, firstname, lastname, usergender, prefgender, age, province, city, neighborhood, rent, listing, userblurb, blurb)
+INSERT INTO tennit_users (email, password)
 VALUES
-    ('john@email.com','AAaa11!!','John','Johnson','male','female',20,'Ontario','Toronto','Leaside',1000, TRUE,'i am user!','this is setting description!'),
-    ('susan@email.com','AAaa11!!','Susan','Susanson','female','male',20,'Ontario','Toronto','The Annex',1001, TRUE,'i am user!','this is setting description!'),
-    ('gertrude@email.com','AAaa11!!','Gertrude','Gertrudeson','female','male',20,'Ontario','Mississauga','Clarkson',1500, TRUE,'i am user!','this is setting description!'),
-    ('margret@email.com','AAaa11!!','Margret','Margretson','female','male',20,'Ontario','Toronto','Yorkdale',700, FALSE, 'i am user!','this is setting description!');
+    ('john@email.com','AAaa11!!'),
+    ('susan@email.com','AAaa11!!'),
+    ('gertrude@email.com','AAaa11!!'),
+    ('margret@email.com','AAaa11!!');
+
+INSERT INTO tennit_listings (user_id, firstname, lastname, usergender, prefgender, age, province, city, neighborhood, rent, listing, userblurb, blurb)
+VALUES 
+    (1,'John','Johnson','male','female',20,'Ontario','Toronto','Leaside',1000, TRUE,'i am user!','this is setting description!'),
+    (2,'Susan','Susanson','female','male',25,'Ontario','Toronto','The Annex',1001, TRUE,'i am user!','this is setting description!'),
+    (3,'Gertrude','Gertrudeson','female','male',22,'Ontario','Mississauga','Clarkson',1500, TRUE,'i am user!','this is setting description!'),
+    (4,'Margret','Margretson','female','male',21,'Ontario','Toronto','Yorkdale',700, FALSE, 'i am user!','this is setting description!');
 
 INSERT INTO tennit_images (image, user_id)
 VALUES

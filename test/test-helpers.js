@@ -3,6 +3,26 @@ function makeUserArray() {
         {
             email: 'john@email.com',
             password: 'AAaa11!!',
+        },
+        {
+            email: 'susan@email.com',
+            password: 'AAaa11!!',
+        },
+        {
+            email: 'gertrude@email.com',
+            password: 'AAaa11!!',
+        },
+        {
+            email: 'margret@email.com',
+            password: 'AAaa11!!',
+        },
+    ]
+}
+
+function makeListingArray(user){
+    return [
+        {
+            user_id: user[0].id,
             firstname: 'John',
             lastname: 'Johnson',
             usergender: 'male',
@@ -17,8 +37,7 @@ function makeUserArray() {
             blurb: 'this is setting description!',
         },
         {
-            email: 'susan@email.com',
-            password: 'AAaa11!!',
+            user_id: user[1].id,
             firstname: 'Susan',
             lastname: 'Susanson',
             usergender: 'female',
@@ -33,8 +52,7 @@ function makeUserArray() {
             blurb: 'this is setting description!',
         },
         {
-            email: 'gertrude@email.com',
-            password: 'AAaa11!!',
+            user_id: user[2].id,
             firstname: 'Gertrude',
             lastname: 'Gertrudeson',
             usergender: 'female',
@@ -49,8 +67,7 @@ function makeUserArray() {
             blurb: 'this is setting description!',
         },
         {
-            email: 'margret@email.com',
-            password: 'AAaa11!!',
+            user_id: user[3].id,
             firstname: 'Margret',
             lastname: 'Margretson',
             usergender: 'female',
@@ -63,40 +80,41 @@ function makeUserArray() {
             listing: false,
             userblurb: 'i am user!',
             blurb: 'this is setting description!',
-        },
+        }
+
     ]
 }
 
-function makeImageArray(user){
+function makeImageArray(listing){ 
     return [
         {
             image: 'https://loremflickr.com/500/500/landscape?random=1',
-            user_id: user[0].id,
+            user_id: listing[0].user_id,
             date_updated: new Date(),
         },
         {
             image: 'https://loremflickr.com/500/500/landscape?random=2',
-            user_id: user[0].id,
+            user_id: listing[0].user_id,
             date_updated: new Date(),
         },
         {
             image: 'https://loremflickr.com/500/500/landscape?random=3',
-            user_id: user[0].id,
+            user_id: listing[0].user_id,
             date_updated: new Date(),
         },
         {
             image: 'https://loremflickr.com/500/500/landscape?random=4',
-            user_id: user[1].id,
+            user_id: listing[1].user_id,
             date_updated: new Date(),
         },
         {
             image: 'https://loremflickr.com/500/500/landscape?random=5',
-            user_id: user[2].id,
+            user_id: listing[2].user_id,
             date_updated: new Date(),
         },
         {
             image: 'https://loremflickr.com/500/500/landscape?random=6',
-            user_id: user[3].id,
+            user_id: listing[3].user_id,
             date_updated: new Date(),
         },
     ]
@@ -110,93 +128,67 @@ function makeImageArray(user){
 
 //NOTES ANTHONY; dont do two way 'like system', make it more like a marketplace app
 
-function makeMatchArray(users){
+function makeMatchArray(listings){
     return [
         {
-            user1_id: users[0].id, //FK john
-            user2_id: users[1].id, //FK susan
+            user1_id: listings[0].user_id, //FK john
+            user2_id: listings[1].user_id, //FK susan
             user1_bool: true, 
             user2_bool: true, //susan and john liked eachother
             filter: false,
         },
         {
-            user1_id: users[0].id, //FK john
-            user2_id: users[2].id, //FK gert
+            user1_id: listings[0].user_id, //FK john
+            user2_id: listings[2].user_id, //FK gert
             user1_bool: false, 
             user2_bool: true, //susan2  liked john
             filter: false
         },
         {
-            user1_id: users[0].id, //FK john
-            user2_id: users[3].id, //FK marg
+            user1_id: listings[0].user_id, //FK john
+            user2_id: listings[3].user_id, //FK marg
             user1_bool: false, 
             user2_bool: true, //susan3 liked john
             filter: false,
         },
         {
-            user1_id: users[1].id, //FK susan 1
-            user2_id: users[3].id, //FK marg
+            user1_id: listings[1].user_id, //FK susan 1
+            user2_id: listings[3].user_id, //FK marg
             user1_bool: true, 
             user2_bool: true, 
             filter: false,
         },
     ]
 }
-//how will convo's be created? 
-//once both users 'like' each other, both booleans being true, it will create a new row in the convo table
-//when users are on their profile, the page will display links to convos via the convo.id to a new page that displays comments associated with it
-
-// function makeConvoArray(matches){
-//     return[
-//         {
-//             id: 1,
-//             user1_id: matches[0].user1_id, //FK
-//             user2_id: matches[0].user2_id, //FK
-//             date_created: new Date(),
-//         },
-//         {
-//             id: 2,
-//             user1_id: matches[3].user1_id, //FK
-//             user2_id: matches[3].user2_id, //FK
-//             date_created: new Date(),
-//         },
-//     ]
-// }
 
 function makeCommentArray(matches){
     return[
         {
-            id: 1,
             convo_id: matches[0].id,
             poster_id: matches[0].user1_id,
             comment: 'blah blah blah'
         },
         {
-            id: 2,
             convo_id: matches[0].id,
             poster_id: matches[0].user2_id,
             comment: 'blah blah blah'
         },
         {
-            id: 3,
             convo_id: matches[0].id,
             poster_id: matches[0].user1_id,
             comment: 'blah blah blah'
         },
         {
-            id: 4,
             convo_id: matches[1].id,
             poster_id: matches[1].user1_id,
             comment: 'blah blah blah123123'
         },
         {
-            id: 5,
             convo_id: matches[0].id,
             poster_id: matches[0].user2_id,
             comment: 'blah blah blah'
         },
         {
-            id: 6,
             convo_id: matches[2].id,
             poster_id: matches[2].user1_id,
             comment: 'blah blah blah'
@@ -210,11 +202,10 @@ function makeCommentArray(matches){
 //      from tennit_convo table -> select convo.id -> 
 //      where convo.user1_id=matches.user1_id && convo.user2_id=matches.user2_id
 
-function makeMaliciousUser() {
-    const maliciousUser = 
+function makeMaliciousListing(users) {
+    const maliciousListing = 
         {
-            email: 'john@email.com',
-            password: 'AAaa11!!',
+            user_id: users[0].id,
             firstname: 'Naughty naughty very naughty <script>alert("xss");</script>',
             lastname: `Bad image <img src="https://url.to.file.which/does-not.exist" onerror="alert(document.cookie);">. But not <strong>all</strong> bad.`,
             usergender: 'male',
@@ -228,33 +219,36 @@ function makeMaliciousUser() {
             userblurb: 'i am user!',
             blurb: 'this is setting description!',
         }
-    const expectedUser = 
+    const expectedListing = 
         {
-            ...maliciousUser,
+            ...maliciousListing,
             firstname: 'Naughty naughty very naughty &lt;script&gt;alert(\"xss\");&lt;/script&gt;',
             lastname: `Bad image <img src="https://url.to.file.which/does-not.exist">. But not <strong>all</strong> bad.`
         } 
     return {
-        maliciousUser,
-        expectedUser
+        maliciousListing,
+        expectedListing
     }
 }
+
 function makeThingsFixtures(){
     const testUsers = makeUserArray()
-    const testImages = makeImageArray(testUsers)
-    const testMatches = makeMatchArray(testUsers)
+    const testListings = makeListingArray(testUsers)
+    const testImages = makeImageArray(testListings)
+    const testMatches = makeMatchArray(testListings)
     const testComments = makeCommentArray(testMatches)
 
-    return { testUsers, testImages, testMatches, testComments}
+    return { testUsers, testListings, testImages, testMatches, testComments}
 }
 
 
 module.exports = {
     makeUserArray,
+    makeListingArray,
     makeImageArray,
     makeMatchArray,
     makeCommentArray,
-    makeMaliciousUser,
+    makeMaliciousListing,
 
     makeThingsFixtures,
 }

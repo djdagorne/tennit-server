@@ -4,10 +4,10 @@ CREATE TYPE gender AS ENUM (
     'other'
 );
 
-ALTER TABLE tennit_users
+ALTER TABLE tennit_listings
   ADD COLUMN
     userGender gender NOT NULL;
     
-ALTER TABLE tennit_users
+ALTER TABLE tennit_listings
   ADD COLUMN
     prefGender gender NOT NULL;
