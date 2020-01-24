@@ -1,7 +1,7 @@
 const app = require('../src/app')
 const knex = require('knex')
 const helpers = require('./test-helpers')
-const { testUsers } = helpers.makeThingsFixtures()
+const { testUsers, testListings } = helpers.makeThingsFixtures()
 const {maliciousListing, expectedListing} = helpers.makeMaliciousListing(testUsers)
 
 describe('Users Endpoints', function() {
@@ -132,10 +132,20 @@ describe('Users Endpoints', function() {
     })
     describe('DELETE /api/users/:user_id',()=>{
         context('given there are users in the database',()=>{
-            beforeEach('insert the users',()=>{
+            beforeEach('insert the users and listings',()=>{
                 return db
                     .into('tennit_users')
                     .insert(testUsers)
+                    .then(()=>
+                        supertest(app)
+                            .get('/api/users')
+                            .then(res=>{
+                                const testListings = helpers.makeListingArray(res.body)
+                                return db
+                                    .into('tennit_listings')
+                                    .insert(testListings)
+                            })
+                    )
             })
             it('responds with 204 and successfully removes user',()=>{
                 const expectedUsers = testUsers.slice(1)
@@ -149,6 +159,20 @@ describe('Users Endpoints', function() {
                             .expect(res=>{
                                 expect(res.body[0].id).to.eql(2)
                                 expect(res.body.length).to.eql(expectedUsers.length)
+                            })
+                    )
+            })
+            it('responds 204 removes the associated listings as well',()=>{
+                const expectedListings = testListings.slice(1)
+                return supertest(app)
+                    .delete('/api/users/1')
+                    .then(()=>
+                        supertest(app)
+                            .get('/api/listings/')
+                            .expect(200)
+                            .expect(res=>{
+                                expect(res.body[0].user_id).to.eql(2)
+                                expect(res.body.length).to.eql(expectedListings.length)
                             })
                     )
             })

@@ -1,4 +1,3 @@
-const REGEX_UPPER_LOWER_NUMBER_SPECIAL = /(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%\^&])[\S]+/
 const xss = require('xss')
 
 const ListingsService = {
@@ -17,19 +16,36 @@ const ListingsService = {
                 return rows[0]
             })
     },
-    // getSearchResults(knex, province, city, neighborhood){
-    //     return knex('tennit_listings')
-    //         .where(province)
-    //         .then()
-    // },
-    deleteListing(knex, id){
-        return knex('tennit_listings')
-            .where({id})
-            .delete()
+    getSearchResults(listings, province, city, neighborhood, rent){
+        console.log('gSR')
+        if(!!province){
+            listings = listings.filter(filter=>
+                filter.province.toLowerCase().includes(province.toLowerCase())    
+            )
+        }
+        if(!!city){
+            listings = listings.filter(filter=>
+                filter.city.toLowerCase().includes(city.toLowerCase())    
+            )
+        }
+        if(!!neighborhood){
+            listings = listings.filter(filter=>
+                filter.neighborhood.toLowerCase().includes(neighborhood.toLowerCase())    
+            )
+        }
+        if(!!rent){
+            listings = listings.filter(filter=>
+                Number(filter.rent) >= Number(rent)
+            )
+        }
+        console.log(listings) //TODO data gets here fine but isn't return properly wtf mon
+        return listings //TODO figure this one out
+        console.log('wtf')
+        
     },
-    updateListing(knex, id, newListingFields){
+    updateListing(knex, user_id, newListingFields){
         return knex('tennit_listings')
-            .where({id})
+            .where({user_id})
             .update(newListingFields)
     },
     serializeUser(listing){

@@ -90,32 +90,32 @@ function makeImageArray(listing){
         {
             image: 'https://loremflickr.com/500/500/landscape?random=1',
             user_id: listing[0].user_id,
-            date_updated: new Date(),
+            date_modified: new Date(),
         },
         {
             image: 'https://loremflickr.com/500/500/landscape?random=2',
             user_id: listing[0].user_id,
-            date_updated: new Date(),
+            date_modified: new Date(),
         },
         {
             image: 'https://loremflickr.com/500/500/landscape?random=3',
             user_id: listing[0].user_id,
-            date_updated: new Date(),
+            date_modified: new Date(),
         },
         {
             image: 'https://loremflickr.com/500/500/landscape?random=4',
             user_id: listing[1].user_id,
-            date_updated: new Date(),
+            date_modified: new Date(),
         },
         {
             image: 'https://loremflickr.com/500/500/landscape?random=5',
             user_id: listing[2].user_id,
-            date_updated: new Date(),
+            date_modified: new Date(),
         },
         {
             image: 'https://loremflickr.com/500/500/landscape?random=6',
             user_id: listing[3].user_id,
-            date_updated: new Date(),
+            date_modified: new Date(),
         },
     ]
 }
@@ -135,28 +135,24 @@ function makeMatchArray(listings){
             user2_id: listings[1].user_id, //FK susan
             user1_bool: true, 
             user2_bool: true, //susan and john liked eachother
-            filter: false,
         },
         {
             user1_id: listings[0].user_id, //FK john
             user2_id: listings[2].user_id, //FK gert
             user1_bool: false, 
             user2_bool: true, //susan2  liked john
-            filter: false
         },
         {
             user1_id: listings[0].user_id, //FK john
             user2_id: listings[3].user_id, //FK marg
             user1_bool: false, 
             user2_bool: true, //susan3 liked john
-            filter: false,
         },
         {
             user1_id: listings[1].user_id, //FK susan 1
             user2_id: listings[3].user_id, //FK marg
             user1_bool: true, 
             user2_bool: true, 
-            filter: false,
         },
     ]
 }
