@@ -1,7 +1,6 @@
 function makeUserArray() {
     return [
         {
-            id:1,
             email: 'john@email.com',
             password: 'AAaa11!!',
             firstname: 'John',
@@ -18,7 +17,6 @@ function makeUserArray() {
             blurb: 'this is setting description!',
         },
         {
-            id:2,
             email: 'susan@email.com',
             password: 'AAaa11!!',
             firstname: 'Susan',
@@ -35,7 +33,6 @@ function makeUserArray() {
             blurb: 'this is setting description!',
         },
         {
-            id:3,
             email: 'gertrude@email.com',
             password: 'AAaa11!!',
             firstname: 'Gertrude',
@@ -52,7 +49,6 @@ function makeUserArray() {
             blurb: 'this is setting description!',
         },
         {
-            id:4,
             email: 'margret@email.com',
             password: 'AAaa11!!',
             firstname: 'Margret',
@@ -74,37 +70,31 @@ function makeUserArray() {
 function makeImageArray(user){
     return [
         {
-            id: 1,
             image: 'https://loremflickr.com/500/500/landscape?random=1',
             user_id: user[0].id,
             date_updated: new Date(),
         },
         {
-            id: 2,
             image: 'https://loremflickr.com/500/500/landscape?random=2',
             user_id: user[0].id,
             date_updated: new Date(),
         },
         {
-            id: 3,
             image: 'https://loremflickr.com/500/500/landscape?random=3',
             user_id: user[0].id,
             date_updated: new Date(),
         },
         {
-            id: 4,
             image: 'https://loremflickr.com/500/500/landscape?random=4',
             user_id: user[1].id,
             date_updated: new Date(),
         },
         {
-            id: 5,
             image: 'https://loremflickr.com/500/500/landscape?random=5',
             user_id: user[2].id,
             date_updated: new Date(),
         },
         {
-            id: 6,
             image: 'https://loremflickr.com/500/500/landscape?random=6',
             user_id: user[3].id,
             date_updated: new Date(),
@@ -123,7 +113,6 @@ function makeImageArray(user){
 function makeMatchArray(users){
     return [
         {
-            id: 1,
             user1_id: users[0].id, //FK john
             user2_id: users[1].id, //FK susan
             user1_bool: true, 
@@ -131,7 +120,6 @@ function makeMatchArray(users){
             filter: false,
         },
         {
-            id: 2,
             user1_id: users[0].id, //FK john
             user2_id: users[2].id, //FK gert
             user1_bool: false, 
@@ -139,7 +127,6 @@ function makeMatchArray(users){
             filter: false
         },
         {
-            id: 3,
             user1_id: users[0].id, //FK john
             user2_id: users[3].id, //FK marg
             user1_bool: false, 
@@ -147,7 +134,6 @@ function makeMatchArray(users){
             filter: false,
         },
         {
-            id: 4,
             user1_id: users[1].id, //FK susan 1
             user2_id: users[3].id, //FK marg
             user1_bool: true, 
@@ -224,6 +210,35 @@ function makeCommentArray(matches){
 //      from tennit_convo table -> select convo.id -> 
 //      where convo.user1_id=matches.user1_id && convo.user2_id=matches.user2_id
 
+function makeMaliciousUser() {
+    const maliciousUser = 
+        {
+            email: 'john@email.com',
+            password: 'AAaa11!!',
+            firstname: 'Naughty naughty very naughty <script>alert("xss");</script>',
+            lastname: `Bad image <img src="https://url.to.file.which/does-not.exist" onerror="alert(document.cookie);">. But not <strong>all</strong> bad.`,
+            usergender: 'male',
+            prefgender: 'female',
+            age: 20,
+            province: 'Ontario',
+            city: 'Toronto',
+            neighborhood: 'Leaside',
+            rent: 1000,
+            listing: true,
+            userblurb: 'i am user!',
+            blurb: 'this is setting description!',
+        }
+    const expectedUser = 
+        {
+            ...maliciousUser,
+            firstname: 'Naughty naughty very naughty &lt;script&gt;alert(\"xss\");&lt;/script&gt;',
+            lastname: `Bad image <img src="https://url.to.file.which/does-not.exist">. But not <strong>all</strong> bad.`
+        } 
+    return {
+        maliciousUser,
+        expectedUser
+    }
+}
 function makeThingsFixtures(){
     const testUsers = makeUserArray()
     const testImages = makeImageArray(testUsers)
@@ -239,6 +254,7 @@ module.exports = {
     makeImageArray,
     makeMatchArray,
     makeCommentArray,
+    makeMaliciousUser,
 
     makeThingsFixtures,
 }

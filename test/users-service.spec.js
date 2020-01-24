@@ -3,7 +3,7 @@ const knex = require('knex')
 const helpers = require('./test-helpers')
 const UsersService = require('../src/users/users-service')
 
-describe(`UsersService object`, function(){
+describe.skip(`UsersServices Object`, function(){
 
     let db 
     before('make knex instance',()=>{
@@ -25,7 +25,6 @@ describe(`UsersService object`, function(){
                 .into('tennit_users')
                 .insert(testUsers)
         })
-    
         describe(`getAllUsers()`,()=>{
             it(`resolves all users from 'tennit_users' table`,()=>{
                 return UsersService.getAllUsers(db)
@@ -83,41 +82,10 @@ describe(`UsersService object`, function(){
                     })
             })
             it(`insertNewUser() inserts a new user and resolves the new user with an id`,()=>{
-                const newUser = {
-                    email: 'test@email.com',
-                    password: 'AAaa11!!',
-                    firstname: 'testy',
-                    lastname: 'test',
-                    usergender: 'female',
-                    prefgender: 'female',
-                    age: 20,
-                    province: 'testy',
-                    city: 'testy',
-                    neighborhood: 'tester',
-                    rent: 700,
-                    listing: false,
-                    userblurb: 'test!',
-                    blurb: 'testy!',
-                }
-                return UsersService.insertNewUser(db, newUser)
+                const testUsers = helpers.makeUserArray()
+                return UsersService.insertNewUser(db, testUsers[0])
                     .then(actual=>{
-                        expect(actual).to.eql({
-                            id: 1,
-                            email: 'test@email.com',
-                            password: 'AAaa11!!',
-                            firstname: 'testy',
-                            lastname: 'test',
-                            usergender: 'female',
-                            prefgender: 'female',
-                            age: 20,
-                            province: 'testy',
-                            city: 'testy',
-                            neighborhood: 'tester',
-                            rent: 700,
-                            listing: false,
-                            userblurb: 'test!',
-                            blurb: 'testy!',
-                        })
+                        expect(actual).to.eql(testUsers[0])
                     })
             })
     })

@@ -5,10 +5,9 @@ const helmet = require('helmet');
 const cors = require('cors');
 const { NODE_ENV } = require('./config')
 const winston = require('winston')
+const usersRouter = require('./users/users-router')
 
 const app = express();
-
-const UsersService = require('./users/users-service')
 
 const morganOption = (NODE_ENV === 'production') ? 'tiny' : 'common';
 
@@ -16,15 +15,8 @@ app.use(morgan(morganOption));
 app.use(helmet());
 app.use(cors());
 
+app.use('/api/users', usersRouter)
 
-app.get('/api/users', (req,res,next)=>{
-    const knexInstance = req.app.get('db')
-    UsersService.getAllUsers(knexInstance)
-        .then(users=>{
-            res.json(users)
-        })
-        .catch(next)
-})
 
 //app.use('/api/users', usersRouter) to get user data from dbuser data from db
 //app.use('/api/matches/', usersRouter) get match data from db
@@ -64,11 +56,5 @@ app.get('/api/users', (req,res,next)=>{
 //     }
 //     res.status(500).json(response);
 // })
-
-
-app.get('/', (req, res) => {
-    console.log('helloworld')
-    res.send('Hello, World!')
-})
 
 module.exports = app;
