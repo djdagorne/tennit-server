@@ -1,11 +1,11 @@
 const REGEX_UPPER_LOWER_NUMBER_SPECIAL = /(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%\^&])[\S]+/
 const xss = require('xss')
 
-const UsersService = {
+const ListingsService = {
     getAllListings(knex){
         return knex.select('*').from('tennit_listings')
     },
-    getListingById(knex, id){
+    getListingById(knex, user_id){
         return knex.from('tennit_listings').select('*').where('user_id',user_id).first()
     },
     insertNewListing(knex, newListing){

@@ -6,7 +6,7 @@ const cors = require('cors');
 const { NODE_ENV } = require('./config')
 const winston = require('winston')
 const usersRouter = require('./users/users-router')
-const listingsRouter = require('./listings/listing-router')
+const listingsRouter = require('./listings/listings-router')
 
 const app = express();
 
