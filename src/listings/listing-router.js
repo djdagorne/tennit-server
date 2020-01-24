@@ -6,3 +6,4 @@ const jsonParser = express.json()
 
 listingRouter
     .get('/')
+    
