@@ -7,6 +7,7 @@ const { NODE_ENV } = require('./config')
 const winston = require('winston')
 const usersRouter = require('./users/users-router')
 const listingsRouter = require('./listings/listings-router')
+const matchesRouter = require('./matches/matches-router')
 
 const app = express();
 
@@ -18,8 +19,7 @@ app.use(cors());
 
 app.use('/api/users', usersRouter)
 app.use('/api/listings', listingsRouter)
-
-//app.use('/api/matches/', usersRouter) get match data from db
+app.use('/api/matches/', matchesRouter) //get match data from db
 //app.use('/api/images', usersRouter) get image links from db
 //app.use('/api/comments', usersRouter) get comment posts from db
 //app.use('/api/auth', usersRouter) auth 

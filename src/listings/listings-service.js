@@ -17,7 +17,6 @@ const ListingsService = {
             })
     },
     getSearchResults(listings, province, city, neighborhood, rent){
-        console.log('gSR')
         if(!!province){
             listings = listings.filter(filter=>
                 filter.province.toLowerCase().includes(province.toLowerCase())    
@@ -38,10 +37,11 @@ const ListingsService = {
                 Number(filter.rent) >= Number(rent)
             )
         }
-        console.log(listings) //TODO data gets here fine but isn't return properly wtf mon
-        return listings //TODO figure this one out
-        console.log('wtf')
-        
+        if(listings.length > 0){
+            return listings
+        }else{
+            return {error: {message: 'Search returned empty.'}}
+        }
     },
     updateListing(knex, user_id, newListingFields){
         return knex('tennit_listings')

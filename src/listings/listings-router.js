@@ -11,18 +11,18 @@ listingRouter
             .then(allListings=>{
                 const {province, city, neighborhood, rent} = req.query
                 if(province || city || neighborhood || rent){
-                    ListingsService.getSearchResults(
-                        allListings,
-                        province,
-                        city,
-                        neighborhood,
-                        rent
+                    res.json(
+                        ListingsService.getSearchResults(
+                            allListings,
+                            province,
+                            city,
+                            neighborhood,
+                            rent
+                        )
                     )
-                    .then(searchResults=> //why is this not a function!?!?
-                        res.json(searchResults)
-                    )
+                }else{
+                    res.json(allListings)
                 }
-                res.json(allListings)
             })
             .catch(next)
     })

@@ -29,7 +29,9 @@ usersRouter
         )
             .then(hasDupeEmail => {
                 if(hasDupeEmail){
-                    return res.status(400).json({error: { message: `Email already in use.` }})
+                    return res.status(400).json({
+                        error: { message: `Email already in use.` }
+                    })
                 }
                 return UsersService.insertNewUser(
                     req.app.get('db'),
@@ -55,7 +57,9 @@ usersRouter
         )
             .then(user =>{
                 if(!user){
-                    return res.status(404).json({ error: { message: `User doesn't exist.`}})
+                    return res.status(404).json({
+                            error: { message: `User doesn't exist.`}
+                        })
                 }
                 res.user = user; //creating user object in the response
                 next()
@@ -95,7 +99,9 @@ usersRouter
                 })
                 .catch(next)
         }else{
-            return res.status(400).json({ error: {message: 'Request body must supply a correct field.'}})
+            return res.status(400).json({
+                    error: {message: 'Request body must supply a correct field.'}
+                })
         }
     })
 

@@ -75,9 +75,23 @@ describe('Listings Endpoints', function() {
                                 })
                         })
             })
-            it.only('GET /api/listing/ can find listings by province, city, and rent',()=>{
+            it('GET /api/listings/ can find listings by province, city, and rent',()=>{
                 return supertest(app)
-                    .get('/api/listing')
+                    .get('/api/listings/')
+                    .query({ rent: 1500})
+                    .expect(200)
+                    .expect(res=>{
+                        expect(res.body[0].rent).to.eql(1500)
+                    })
+            })
+            it('GET /api/listings/ returns an error when search finds no matches',()=>{
+                return supertest(app)
+                    .get('/api/listings/')
+                    .query({city: 'zzzzzzzzz'})
+                    .expect(200)
+                    .expect(res=>{
+                        expect(res.body).to.eql({error: {message: 'Search returned empty.'}})
+                    })
             })
         })
         context('Given no users in the database',()=>{
@@ -116,20 +130,6 @@ describe('Listings Endpoints', function() {
                             })
                     )
             })
-            // it('DELETE /api/listings/:user_id removes listing object',()=>{  //do we keep this if DELETE user is working?
-            //     const expectedListings = testListings.slice(1)
-            //     return supertest(app)
-            //         .delete('/api/listings/1')
-            //         .expect(204)
-            //         .then(res=>
-            //             supertest(app)
-            //                 .get('/api/listings/')
-            //                 .expect(200)
-            //                 .expect(res=>{
-            //                     expect(res.body[0].user_id).to.eql(2)
-            //                 })
-            //         )
-            // })
         })
     })
 }) 
