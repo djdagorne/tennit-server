@@ -119,7 +119,7 @@ describe('Users Endpoints', function() {
                 const testUsers = helpers.makeUserArray()
                 const newUser = testUsers[0]
                 it(`responds with 400 and an error message when the '${field}' is missing`,() => {
-                    newUser[field] = null
+                    delete newUser[field]
                     return supertest(app)
                         .post('/api/users')
                         .send(newUser)
@@ -185,57 +185,4 @@ describe('Users Endpoints', function() {
             })
         })
     })
-    // describe.skip('PATCH /api/users/:user_id',()=>{
-    //     context('given there are users in the database',()=>{
-    //         beforeEach('insert the users',()=>{
-    //         return db
-    //             .into('tennit_users')
-    //             .insert(testUsers)
-    //             .then(()=>{
-    //                 return db
-    //                     .into('tennit_listings')
-    //                     .insert(testListings)
-    //             })
-    //         })
-    //         it('responds 204 and updates the correct field',()=>{
-    //             const newFields = {
-    //                 neighborhood: 'Updated',
-    //                 rent: 700,
-    //             }
-    //             return supertest(app)
-    //                 .patch(`/api/users/3`)
-    //                 .send(newFields)
-    //                 .expect(204)
-    //                 .then(()=>{
-    //                     return supertest(app)
-    //                         .get(`/api/users/3`)
-    //                         .expect(res=>{
-    //                             expect(res.body.rent).to.eql(700)
-    //                             expect(res.body.neighborhood).to.eql('Updated')
-    //                         })
-    //                 })
-    //         })
-    //         it('responds 400 when no required fields are supplied',()=>{
-    //             return supertest(app)
-    //                 .patch(`/api/users/1`)
-    //                 .send({ding: 'dong'})
-    //                 .expect(400, {
-    //                     error: {message: 'Request body must supply a correct field.'}
-    //                 })
-    //         })
-    //         it('filters out unrelated fields and updates the correct user info, responds 204',()=>{
-    //             return supertest(app)
-    //                 .patch(`/api/users/1`)
-    //                 .send({ding: 'dong', rent: 777})
-    //                 .expect(204)
-    //                 .then(()=>
-    //                     supertest(app)
-    //                         .get('/api/users/1')
-    //                         .expect(res=>
-    //                             expect(res.body.rent).to.eql(777)
-    //                     )
-    //                 )
-    //         })
-    //     })
-    // })
 }) 

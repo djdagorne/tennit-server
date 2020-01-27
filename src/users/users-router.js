@@ -15,9 +15,10 @@ usersRouter
             .catch(next)
     })
     .post(jsonParser, (req,res,next)=>{
+        const testUser = helpers.makeUserArray();
         const newUser = req.body;
-        for(const [key, value] of Object.entries(newUser)){
-            if(value == null){
+        for(const [key, value] of Object.entries(testUser[0])){
+            if(newUser[key] == null){
                 return res.status(400).json({
                     error: { message: `Missing '${key}' in request body.`}
                 })

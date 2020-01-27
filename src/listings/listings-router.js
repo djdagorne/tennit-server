@@ -56,5 +56,33 @@ listingRouter
             })
             .catch(next)
     })
-
+    .patch(jsonParser, (req,res,next)=>{
+        const newListingData = req.body;
+        const testUsers = helpers.makeUserArray()
+        const testListing = helpers.makeListingArray(testUsers);
+        const listingKeys = Object.keys(testListing[0])
+        //inspect keys of req.body
+        for(const [key] of Object.entries(newListingData)){
+            //make new array to verify matching keys, deleting keys  newarray.length === 0.
+            if(listingKeys.filter(sampleKey => sampleKey === key).length === 0){ 
+                delete newListingData[key]
+            }
+        }
+        //assuming any keys passed filtertest, follow happy path
+        if(Object.keys(newListingData).length > 0){
+            ListingsService.updateListing(
+                req.app.get('db'),
+                req.params.user_id, 
+                newListingData
+            )
+                .then(rows => {
+                    res.status(204).end()
+                })
+                .catch(next)
+        }else{
+            return res.status(400).json({
+                    error: {message: 'Request body must supply a correct field.'}
+                })
+        }
+    })
 module.exports = listingRouter;

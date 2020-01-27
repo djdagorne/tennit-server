@@ -19,7 +19,7 @@ app.use(cors());
 
 app.use('/api/users', usersRouter)
 app.use('/api/listings', listingsRouter)
-app.use('/api/matches/', matchesRouter) //get match data from db
+app.use('/api/matches', matchesRouter) //get match data from db
 //app.use('/api/images', usersRouter) get image links from db
 //app.use('/api/comments', usersRouter) get comment posts from db
 //app.use('/api/auth', usersRouter) auth 
