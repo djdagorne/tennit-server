@@ -1,7 +1,7 @@
 const app = require('../src/app')
 const knex = require('knex')
 const helpers = require('./test-helpers')
-const { testUsers } = helpers.makeThingsFixtures()
+const { testUsers, testListings, testMatches } = helpers.makeThingsFixtures()
 
 describe('Matches Endpoints', function() {
     let db 
@@ -16,37 +16,215 @@ describe('Matches Endpoints', function() {
     afterEach('clean the tables',()=> db.raw('TRUNCATE tennit_users, tennit_listings, tennit_images, tennit_matches, tennit_comments RESTART IDENTITY CASCADE'))
     after('disconnect from db',()=> db.destroy())
     
-    beforeEach('insert the users, listings and matches',()=>{
-        return db
-            .into('tennit_users')
-            .insert(testUsers)
-            .then(()=>
-                supertest(app)
-                    .get('/api/users')
-                    .then(res=>{
-                        const testListings = helpers.makeListingArray(res.body)
-                        return db
-                            .into('tennit_listings')
-                            .insert(testListings)
-                            .then(()=>{
-                                supertest(app)
-                                    .get('/api/listings')
-                                    .then(res=>{
-                                        const testMatches = helpers.makeMatchArray(res.body)
-                                        return db
-                                            .into('tennit_matches')
-                                            .insert(testMatches)
-                                    })
+    
+    describe('GET /api/matches/',()=>{
+        context('given there is data in the tables',()=>{
+            beforeEach('insert the users, listings and matches',()=>{
+                return db
+                    .into('tennit_users')
+                    .insert(testUsers)
+                    .then(()=>
+                        supertest(app)
+                            .get('/api/users')
+                            .then(res=>{
+                                const testListings = helpers.makeListingArray(res.body)
+                                return db
+                                    .into('tennit_listings')
+                                    .insert(testListings)
+                                    .then(()=>
+                                        supertest(app)
+                                            .get('/api/listings')
+                                            .then(res=>{
+                                                const testMatches = helpers.makeMatchArray(res.body)
+                                                return db
+                                                    .into('tennit_matches')
+                                                    .insert(testMatches)
+                                            })
+                                    )
                             })
-                    })
-            )
-    })
-    describe.only('GET /api/matches/',()=>{
-        it('given a user_id, it finds all matches associated with that user',()=>{
-            return supertest(app)
-                .get('/api/matches')
-                .send({user_id:1})
-                .expect(200)
+                    )
+            })
+            it('given a user_id, it finds all matches associated with that user',()=>{
+                return supertest(app)
+                    .get(`/api/matches/`)
+                    .query({user_id:1})
+                    .expect(200)
+                    .expect(res => 
+                        expect(res.body.length).to.eql(3)
+                    )
+            })
+            it('given a wrong user_id in the query, it gives the correct error code',()=>{
+                return supertest(app)
+                    .get('/api/matches/')
+                    .query({user_id:11111111})
+                    .expect(404)
+                    .expect(res => 
+                        expect(res.body).to.eql({
+                            error: {message: `No match found.`}
+                        })
+                    )
+            })
+            it('given no user_id in the query, it gives the correct error code',()=>{
+                return supertest(app)
+                    .get('/api/matches/')
+                    .expect(404)
+                    .expect(res=>
+                        expect(res.body).to.eql({
+                            error: {message: `No valid query entered.`}
+                        })    
+                    )
+            })
+            it('given an invalid format for the user_id in the query, it gives the correct error code',()=>{
+                return supertest(app)
+                    .get('/api/matches/')
+                    .query({user_id:'SCOOBYDOO'})
+                    .expect(404)
+                    .expect(res=>
+                        expect(res.body).to.eql({
+                            error: {message: `No valid query entered.`}
+                        })    
+                    )
+            })
         })
     })
-}) 
+    describe('GET /api/matches/:match_id',()=>{
+        context('given populated database',()=>{
+            beforeEach('insert the users, listings, matches, comments',()=>{
+                return db
+                    .into('tennit_users')
+                    .insert(testUsers)
+                    .then(()=>
+                        supertest(app)
+                            .get('/api/users')
+                            .then(res=>{
+                                const testListings = helpers.makeListingArray(res.body)
+                                return db
+                                    .into('tennit_listings')
+                                    .insert(testListings)
+                                    .then(()=>
+                                        supertest(app)
+                                            .get('/api/listings')
+                                            .then(res=>{
+                                                const testMatches = helpers.makeMatchArray(res.body)
+                                                return db
+                                                    .into('tennit_matches')
+                                                    .insert(testMatches) //comment insert starts here
+                                                    // .then(()=>
+                                                    //     db.select('*').from('tennit_matches')
+                                                    //         .then(matches=>{
+                                                    //             const testComments = helpers.makeThingsFixtures(matches)
+                                                    //             return db
+                                                    //                 .into('tennit_comments')
+                                                    //                 .insert(testComments)
+                                                    //         })
+                                                    // )
+                                            })
+                                    )
+                            })
+                    )
+            })
+            it('should return an object with the match details',()=>{
+                return supertest(app)
+                    .get('/api/matches/1')
+                    .expect(200)
+                    .expect(res=>{
+                        expect(res.body.id).to.eql(1)
+                    })
+            })
+        })
+        it('with empty tables it returns a 404',()=>{
+            return supertest(app)
+                .get('/api/matches/1')
+                .expect(404)
+        })
+    })
+    describe('POST /api/matches/',()=>{
+        context('given users and listings',()=>{
+            beforeEach('insert the users, listings, matches',()=>{
+                return db
+                    .into('tennit_users')
+                    .insert(testUsers)
+                    .then(()=>
+                        supertest(app)
+                            .get('/api/users')
+                            .then(res=>{
+                                const testListings = helpers.makeListingArray(res.body)
+                                return db
+                                    .into('tennit_listings')
+                                    .insert(testListings)
+                                    .then(()=>
+                                        supertest(app)
+                                            .get('/api/listings')
+                                            .then(res=>{
+                                                const testMatches = helpers.makeMatchArray(res.body)
+                                                return db
+                                                    .into('tennit_matches')
+                                                    .insert(testMatches)
+                                            })
+                                    )
+                            })
+                    )
+            })
+            it('creates a new match with the two supplied listings',()=>{
+                return supertest(app)
+                    .post('/api/matches')
+                    .send({
+                        user1_id:3,
+                        user2_id:4
+                    })
+                    .expect(201)
+                    .expect(res=>{
+                        expect(res.body.id).to.eql(5)
+                    })
+            })
+            it('gives an error if duplicate match is found',()=>{
+                return supertest(app)
+                    .post('/api/matches')
+                    .send({
+                        user1_id:1,
+                        user2_id:2
+                    })
+                    .expect(400, {
+                        error: {message: `Users already matched.`}
+                    })
+            })
+        })  
+    })
+    describe('DELETE /api/matches/:match_id',()=>{
+        beforeEach('insert the users, listings, matches',()=>{
+            return db
+                .into('tennit_users')
+                .insert(testUsers)
+                .then(()=>
+                    supertest(app)
+                        .get('/api/users')
+                        .then(res=>{
+                            const testListings = helpers.makeListingArray(res.body)
+                            return db
+                                .into('tennit_listings')
+                                .insert(testListings)
+                                .then(()=>
+                                    supertest(app)
+                                        .get('/api/listings')
+                                        .then(res=>{
+                                            const testMatches = helpers.makeMatchArray(res.body)
+                                            return db
+                                                .into('tennit_matches')
+                                                .insert(testMatches)
+                                        })
+                                )
+                        })
+                )
+        })
+        it('should delete the requested user and return a 204',()=>{
+            return supertest(app)
+                .delete('/api/matches/1')
+                .expect(204)
+        })
+        it('should return an error if no user found',()=>{
+            return supertest(app)
+                .delete('/api/matches/1222')
+                .expect(404)
+        })
+    })
+})

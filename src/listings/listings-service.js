@@ -48,16 +48,21 @@ const ListingsService = {
             .where({user_id})
             .update(newListingFields)
     },
-    serializeUser(listing){
+    serializeListing(newListing){
         return {
-            ...listing,
-            firstname: xss(listing.firstname),
-            lastname: xss(listing.lastname),
-            province: xss(listing.province),
-            city: xss(listing.city),
-            neighborhood: xss(listing.neighborhood),
-            userblurb: xss(listing.userblurb),
-            blurb: xss(listing.blurb),
+            user_id: newListing.user_id,
+            firstname: xss(newListing.firstname),
+            lastname: xss(newListing.lastname),
+            usergender: newListing.usergender,
+            prefgender: newListing.prefgender,
+            age: newListing.age,
+            province: xss(newListing.province),
+            city: xss(newListing.city),
+            neighborhood: xss(newListing.neighborhood),
+            rent: newListing.rent,
+            listing: newListing.listing,
+            userblurb: xss(newListing.userblurb),
+            blurb: xss(newListing.blurb),
         }
     }
 }

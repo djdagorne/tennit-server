@@ -8,6 +8,7 @@ const winston = require('winston')
 const usersRouter = require('./users/users-router')
 const listingsRouter = require('./listings/listings-router')
 const matchesRouter = require('./matches/matches-router')
+const commentsRouter = require('./comments/comments-router')
 
 const app = express();
 
@@ -19,10 +20,10 @@ app.use(cors());
 
 app.use('/api/users', usersRouter)
 app.use('/api/listings', listingsRouter)
-app.use('/api/matches', matchesRouter) //get match data from db
-//app.use('/api/images', usersRouter) get image links from db
-//app.use('/api/comments', usersRouter) get comment posts from db
-//app.use('/api/auth', usersRouter) auth 
+app.use('/api/matches', matchesRouter) 
+app.use('/api/comments', commentsRouter) //get comment posts from db
+//app.use('/api/images', Router) get image links from db
+//app.use('/api/auth', Router) auth
 
 
 // app.use(function validateBearerToken(req, res, next) {

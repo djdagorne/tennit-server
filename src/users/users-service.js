@@ -9,12 +9,6 @@ const UsersService = {
     getUserById(knex, id){
         return knex.from('tennit_users').select('*').where('id',id).first()
     },
-    getAllListings(knex){
-        return knex.select('*').from('tennit_listings')
-    },
-    getListingById(knex, id){
-        return knex.from('tennit_listings').select('*').where('user_id',user_id).first()
-    },
     insertNewUser(knex, newUser){
         return knex
             .insert(newUser)
@@ -24,11 +18,6 @@ const UsersService = {
                 return rows[0]
             })
     },
-    // getSearchResults(knex, province, city, neighborhood){
-    //     return knex('tennit_users')
-    //         .where(province)
-    //         .then()
-    // },
     deleteUser(knex, id){
         return knex('tennit_users')
             .where({id})

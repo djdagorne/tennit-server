@@ -152,33 +152,33 @@ function makeMatchArray(listings){
 function makeCommentArray(matches){
     return[
         {
-            convo_id: matches[0].id,
-            poster_id: matches[0].user1_id,
+            match_id: matches[0].id,
+            user_id: matches[0].user1_id,
             comment: 'blah blah blah'
         },
         {
-            convo_id: matches[0].id,
-            poster_id: matches[0].user2_id,
+            match_id: matches[0].id,
+            user_id: matches[0].user2_id,
             comment: 'blah blah blah'
         },
         {
-            convo_id: matches[0].id,
-            poster_id: matches[0].user1_id,
+            match_id: matches[0].id,
+            user_id: matches[0].user1_id,
             comment: 'blah blah blah'
         },
         {
-            convo_id: matches[1].id,
-            poster_id: matches[1].user1_id,
+            match_id: matches[1].id,
+            user_id: matches[1].user1_id,
             comment: 'blah blah blah123123'
         },
         {
-            convo_id: matches[0].id,
-            poster_id: matches[0].user2_id,
+            match_id: matches[0].id,
+            user_id: matches[0].user2_id,
             comment: 'blah blah blah'
         },
         {
-            convo_id: matches[2].id,
-            poster_id: matches[2].user1_id,
+            match_id: matches[2].id,
+            user_id: matches[2].user1_id,
             comment: 'blah blah blah'
         },
     ]

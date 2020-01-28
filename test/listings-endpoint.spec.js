@@ -2,9 +2,8 @@ const app = require('../src/app')
 const knex = require('knex')
 const helpers = require('./test-helpers')
 const { testUsers, testListings } = helpers.makeThingsFixtures()
-const {maliciousListing, expectedListing} = helpers.makeMaliciousListing(testUsers)
 
-describe('Listings Endpoints', function() {
+describe.only('Listings Endpoints', function() {
     let db 
     before('make knex instance',()=>{
         db = knex({
@@ -34,13 +33,14 @@ describe('Listings Endpoints', function() {
                             })
                     )
             })
-            it('GET /api/listings responds with 200 and all the listings',()=>{
+            it('GET /api/listings responds with a 400 if no query made',()=>{
                 return supertest(app)
                     .get('/api/listings/')
-                    .expect(200)
+                    .expect(400)
                     .expect(res => {
-                        expect(res.body[0]).to.have.property('user_id')
-                        expect(res.body[0].firstname).to.have.eql(testListings[0].firstname)
+                        expect(res.body).to.eql({
+                            error: {message: 'No valid query entered.'}
+                        })
                     })
             })
             it(`GET /api/listings/:user_id reponds 200 and gives object w/ correct id's`,()=>{
@@ -80,12 +80,14 @@ describe('Listings Endpoints', function() {
             })
         })
         context('Given no users in the database',()=>{
-            it('GET /api/listings responds with an empty array',()=>{
+            it('GET /api/listings responds with an error',()=>{
                 return supertest(app)
                     .get('/api/listings/')
-                    .expect(200)
+                    .expect(400)
                     .expect(res=>{
-                        expect(res.body).to.eql([])
+                        expect(res.body).to.eql({
+                            error: {message: 'No valid query entered.'}
+                        })
                     })
             })
             it('GET /api/listings/:user_id responds with an error',()=>{
@@ -94,6 +96,84 @@ describe('Listings Endpoints', function() {
                     .expect(404)
                     .expect(res=>{
                         expect(res.body).to.eql({ error: { message: `Listing doesn't exist.`}})
+                    })
+            })
+        })
+        context('given an xss attack listing',()=>{
+            beforeEach('insert the users and malicious listing',()=>{
+                return db
+                    .into('tennit_users')
+                    .insert(testUsers)
+                    .then(()=>
+                        supertest(app)
+                        .get('/api/users')
+                        .then(res=>{
+                            const {maliciousListing} = helpers.makeMaliciousListing(res.body)
+                            return db
+                                .into('tennit_listings')
+                                .insert(maliciousListing)
+                        })
+                    )
+            })
+            it(`responds with 200 and santizes the content`,() => {
+                const {expectedListing} = helpers.makeMaliciousListing(testUsers)
+                return supertest(app)
+                    .get('/api/listings/1')
+                    .expect(200)
+                    .expect(res=>{
+                        expect(res.body).to.eql({
+                            ...expectedListing,
+                            user_id: 1
+                        })
+                    })
+
+            })
+        })
+    })
+    describe.only('POST /api/listing',()=>{
+        context('given users in the db',()=>{
+            beforeEach('insert the users and malicious listing',()=>{
+                return db
+                    .into('tennit_users')
+                    .insert(testUsers)
+            })
+            it('POSTs the listing and returns the listing object',()=>{
+                return db
+                    .select('*')
+                    .from('tennit_users')
+                    .then(users=>{
+                        const testListings = helpers.makeListingArray(users);
+                        const testList = testListings[0] //working fine
+                        return supertest(app)
+                            .post('/api/listings/')
+                            .send(testList)         
+                            .expect(res=>{
+                                expect(res.body).to.eql(testList)
+                            })
+                    })
+            })
+            it('returns an error when there is no supplied listing',()=>{
+                return supertest(app)
+                    .post('/api/listings/')
+                    .send({})
+                    .expect(res=>{
+                        expect(res.body).to.eql({
+                            error: {message: 'Request body must supply a listing object.'}
+                        })
+                    })
+            })
+            it('sanitizes listings on the way into the db',()=>{
+                return db
+                    .select('*')
+                    .from('tennit_users')
+                    .then(users=>{
+                        const {maliciousListing, expectedListing} = helpers.makeMaliciousListing(users)
+                        return supertest(app)
+                            .post('/api/listings/')
+                            .send(maliciousListing)
+                            .expect(res=>{
+                                expect(res.body).to.eql(expectedListing)
+                            })
                     })
             })
         })

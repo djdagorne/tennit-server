@@ -21,10 +21,30 @@ listingRouter
                         )
                     )
                 }else{
-                    res.json(allListings)
+                    res.status(400).json({
+                        error: {message: 'No valid query entered.'}
+                    })
                 }
             })
             .catch(next)
+    })
+    .post(jsonParser, (req,res,next)=>{
+        const {testListings} = helpers.makeThingsFixtures();
+        const newListing = req.body;
+        if(Object.entries(newListing).length > 0){
+            for(const [key, value] of Object.entries(testListings[0])){
+                if(newListing[key] == null){
+                    return res.status(400).json({
+                        error: { message: `Missing '${key}' in request body.`}
+                    })
+                }
+            }
+            res.json(ListingsService.serializeListing(newListing))
+        }else{
+            res.status(400).json({
+                error: {message: 'Request body must supply a listing object.'}
+            })
+        }
     })
     
 listingRouter
@@ -38,23 +58,13 @@ listingRouter
                 if(!listing){
                     return res.status(404).json({ error: { message: `Listing doesn't exist.`}})
                 }
-                res.listing = listing;
+                res.listing = ListingsService.serializeListing(listing);
                 next()
             })
             .catch(next)
     })
     .get((req,res,next)=>{
         res.json(res.listing)
-    })
-    .delete((req,res,next)=>{
-        ListingsService.deleteListing(
-            req.app.get('db'),
-            req.params.user_id
-        )
-            .then(()=>{
-                res.status(204).end()
-            })
-            .catch(next)
     })
     .patch(jsonParser, (req,res,next)=>{
         const newListingData = req.body;

@@ -66,27 +66,6 @@ describe('Users Endpoints', function() {
                     .expect(404, { error: { message: `User doesn't exist.`}})
             })
         })
-    //     context('given an xss attack and empty db',()=>{
-    //         beforeEach('insert the users',()=>{
-    //             return db
-    //                 .into('tennit_users')
-    //                 .insert(testUsers)
-    //                 .then(()=>{
-    //                     return db
-    //                         .into('tennit_listings')
-    //                         .insert(maliciousListing)
-    //                 })
-    //         })
-    //         it(`responds with 200 and santizes the content`,() => {
-    //             return supertest(app)
-    //                 .get('/api/users/1')
-    //                 .expect(200, {
-    //                     id: 1,
-    //                     ...expectedListing
-    //                 })
-
-    //         })
-    //     })
     })
     describe('POST /api/users/',()=>{
         it('it creates a new user, responds with 201 and the user object',()=>{
