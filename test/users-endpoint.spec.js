@@ -111,27 +111,28 @@ describe('Users Endpoints', function() {
     })
     describe('DELETE /api/users/:user_id',()=>{
         context('given there are users in the database',()=>{
-            beforeEach('insert the users and listings',()=>{
+            beforeEach('insert the users, listings',()=>{
                 return db
                     .into('tennit_users')
                     .insert(testUsers)
-                    .then(()=>
-                        supertest(app)
-                            .get('/api/users')
-                            .then(res=>{
-                                const testListings = helpers.makeListingArray(res.body)
+                    .then(()=>{
+                        return db
+                            .select('*')
+                            .from('tennit_users')
+                            .then(users=>{
+                                const testListings = helpers.makeListingArray(users)
                                 return db
                                     .into('tennit_listings')
                                     .insert(testListings)
                             })
-                    )
+                    })
             })
             it('responds with 204 and successfully removes user',()=>{
                 const expectedUsers = testUsers.slice(1)
                 return supertest(app)
                     .delete('/api/users/1')
                     .expect(204)
-                    .then(res=>
+                    .then(()=>
                         supertest(app)
                             .get(`/api/users/`)
                             .expect(200)
@@ -147,11 +148,10 @@ describe('Users Endpoints', function() {
                     .delete('/api/users/1')
                     .then(()=>
                         supertest(app)
-                            .get('/api/listings/')
-                            .expect(200)
+                            .get('/api/listings/1')
+                            .expect(404)
                             .expect(res=>{
-                                expect(res.body[0].user_id).to.eql(2)
-                                expect(res.body.length).to.eql(expectedListings.length)
+                                expect(res.body).to.eql({ error: { message: `Listing doesn't exist.`}})
                             })
                     )
             })

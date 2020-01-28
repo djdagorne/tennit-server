@@ -3,7 +3,7 @@ const knex = require('knex')
 const helpers = require('./test-helpers')
 const { testUsers, testListings } = helpers.makeThingsFixtures()
 
-describe.only('Listings Endpoints', function() {
+describe('Listings Endpoints', function() {
     let db 
     before('make knex instance',()=>{
         db = knex({
@@ -130,7 +130,7 @@ describe.only('Listings Endpoints', function() {
             })
         })
     })
-    describe.only('POST /api/listing',()=>{
+    describe('POST /api/listing',()=>{
         context('given users in the db',()=>{
             beforeEach('insert the users and malicious listing',()=>{
                 return db

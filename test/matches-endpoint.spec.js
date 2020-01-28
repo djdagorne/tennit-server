@@ -23,26 +23,28 @@ describe('Matches Endpoints', function() {
                 return db
                     .into('tennit_users')
                     .insert(testUsers)
-                    .then(()=>
-                        supertest(app)
-                            .get('/api/users')
-                            .then(res=>{
-                                const testListings = helpers.makeListingArray(res.body)
+                    .then(()=>{
+                        return db
+                            .select('*')
+                            .from('tennit_users')
+                            .then(users=>{
+                                const testListings = helpers.makeListingArray(users)
                                 return db
                                     .into('tennit_listings')
                                     .insert(testListings)
-                                    .then(()=>
-                                        supertest(app)
-                                            .get('/api/listings')
-                                            .then(res=>{
-                                                const testMatches = helpers.makeMatchArray(res.body)
+                                    .then(()=>{
+                                        return db
+                                            .select('*')
+                                            .from('tennit_listings')
+                                            .then(listings=>{
+                                                const testMatches = helpers.makeMatchArray(listings)
                                                 return db
                                                     .into('tennit_matches')
                                                     .insert(testMatches)
                                             })
-                                    )
+                                    })
                             })
-                    )
+                    })
             })
             it('given a user_id, it finds all matches associated with that user',()=>{
                 return supertest(app)
@@ -89,39 +91,32 @@ describe('Matches Endpoints', function() {
     })
     describe('GET /api/matches/:match_id',()=>{
         context('given populated database',()=>{
-            beforeEach('insert the users, listings, matches, comments',()=>{
+            beforeEach('insert the users, listings and matches',()=>{
                 return db
                     .into('tennit_users')
                     .insert(testUsers)
-                    .then(()=>
-                        supertest(app)
-                            .get('/api/users')
-                            .then(res=>{
-                                const testListings = helpers.makeListingArray(res.body)
+                    .then(()=>{
+                        return db
+                            .select('*')
+                            .from('tennit_users')
+                            .then(users=>{
+                                const testListings = helpers.makeListingArray(users)
                                 return db
                                     .into('tennit_listings')
                                     .insert(testListings)
-                                    .then(()=>
-                                        supertest(app)
-                                            .get('/api/listings')
-                                            .then(res=>{
-                                                const testMatches = helpers.makeMatchArray(res.body)
+                                    .then(()=>{
+                                        return db
+                                            .select('*')
+                                            .from('tennit_listings')
+                                            .then(listings=>{
+                                                const testMatches = helpers.makeMatchArray(listings)
                                                 return db
                                                     .into('tennit_matches')
-                                                    .insert(testMatches) //comment insert starts here
-                                                    // .then(()=>
-                                                    //     db.select('*').from('tennit_matches')
-                                                    //         .then(matches=>{
-                                                    //             const testComments = helpers.makeThingsFixtures(matches)
-                                                    //             return db
-                                                    //                 .into('tennit_comments')
-                                                    //                 .insert(testComments)
-                                                    //         })
-                                                    // )
+                                                    .insert(testMatches)
                                             })
-                                    )
+                                    })
                             })
-                    )
+                    })
             })
             it('should return an object with the match details',()=>{
                 return supertest(app)
@@ -140,30 +135,32 @@ describe('Matches Endpoints', function() {
     })
     describe('POST /api/matches/',()=>{
         context('given users and listings',()=>{
-            beforeEach('insert the users, listings, matches',()=>{
+            beforeEach('insert the users, listings and matches',()=>{
                 return db
                     .into('tennit_users')
                     .insert(testUsers)
-                    .then(()=>
-                        supertest(app)
-                            .get('/api/users')
-                            .then(res=>{
-                                const testListings = helpers.makeListingArray(res.body)
+                    .then(()=>{
+                        return db
+                            .select('*')
+                            .from('tennit_users')
+                            .then(users=>{
+                                const testListings = helpers.makeListingArray(users)
                                 return db
                                     .into('tennit_listings')
                                     .insert(testListings)
-                                    .then(()=>
-                                        supertest(app)
-                                            .get('/api/listings')
-                                            .then(res=>{
-                                                const testMatches = helpers.makeMatchArray(res.body)
+                                    .then(()=>{
+                                        return db
+                                            .select('*')
+                                            .from('tennit_listings')
+                                            .then(listings=>{
+                                                const testMatches = helpers.makeMatchArray(listings)
                                                 return db
                                                     .into('tennit_matches')
                                                     .insert(testMatches)
                                             })
-                                    )
+                                    })
                             })
-                    )
+                    })
             })
             it('creates a new match with the two supplied listings',()=>{
                 return supertest(app)
@@ -191,30 +188,32 @@ describe('Matches Endpoints', function() {
         })  
     })
     describe('DELETE /api/matches/:match_id',()=>{
-        beforeEach('insert the users, listings, matches',()=>{
+        beforeEach('insert the users, listings and matches',()=>{
             return db
                 .into('tennit_users')
                 .insert(testUsers)
-                .then(()=>
-                    supertest(app)
-                        .get('/api/users')
-                        .then(res=>{
-                            const testListings = helpers.makeListingArray(res.body)
+                .then(()=>{
+                    return db
+                        .select('*')
+                        .from('tennit_users')
+                        .then(users=>{
+                            const testListings = helpers.makeListingArray(users)
                             return db
                                 .into('tennit_listings')
                                 .insert(testListings)
-                                .then(()=>
-                                    supertest(app)
-                                        .get('/api/listings')
-                                        .then(res=>{
-                                            const testMatches = helpers.makeMatchArray(res.body)
+                                .then(()=>{
+                                    return db
+                                        .select('*')
+                                        .from('tennit_listings')
+                                        .then(listings=>{
+                                            const testMatches = helpers.makeMatchArray(listings)
                                             return db
                                                 .into('tennit_matches')
                                                 .insert(testMatches)
                                         })
-                                )
+                                })
                         })
-                )
+                })
         })
         it('should delete the requested user and return a 204',()=>{
             return supertest(app)
