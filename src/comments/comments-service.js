@@ -6,8 +6,7 @@ const CommentsService = {
     },
     sanitizeComment(newComment){
         return {
-            match_id: newComment.match_id,
-            user_id: newComment.user_id,
+            ...newComment,
             comment: xss(newComment.comment)
         }
     },
@@ -19,11 +18,6 @@ const CommentsService = {
             .then(rows=>{
                 return rows[0]
             })
-    },
-    deleteComment(knex, commentId){
-        return knex('tennit_comments')
-            .where({id})
-            .delete()
     }
 
 }

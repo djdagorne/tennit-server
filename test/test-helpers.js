@@ -181,15 +181,18 @@ function makeCommentArray(matches){
             user_id: matches[2].user1_id,
             comment: 'blah blah blah'
         },
+        {
+            match_id: matches[2].id,
+            user_id: matches[2].user2_id,
+            comment: 'blah blah blah'
+        },
+        {
+            match_id: matches[2].id,
+            user_id: matches[2].user1_id,
+            comment: 'blah blah blah'
+        },
     ]
 }
-
-//convo link display: 
-//if matches.user1_bool && matches.user2_bool = true, 
-//      SEARCH FOR EXISTING CONVO
-//      from tennit_convo table -> select convo.id -> 
-//      where convo.user1_id=matches.user1_id && convo.user2_id=matches.user2_id
-
 function makeMaliciousListing(users) {
     const maliciousListing = 
         {

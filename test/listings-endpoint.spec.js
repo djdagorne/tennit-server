@@ -176,24 +176,25 @@ describe('Listings Endpoints', function() {
                             })
                     })
             })
-        })
-    })
-    describe('DELETE /api/listings/:user_id',()=>{
-        context('given the database has info',()=>{
-            beforeEach('insert the users and listings and images',()=>{
-                return db
-                    .into('tennit_users')
-                    .insert(testUsers)
-                    .then(()=>
-                        supertest(app)
-                            .get('/api/users')
-                            .then(res=>{
-                                const testListings = helpers.makeListingArray(res.body)
-                                return db
-                                    .into('tennit_listings')
-                                    .insert(testListings)
+            const requiredFields = Object.keys(testListings[0])
+            requiredFields.forEach(field=>{
+                const testListings = helpers.makeListingArray(testUsers)
+                const newListing = {
+                    ...testListings[0],
+                    user_id: 1 
+                }
+                it(`returns an error code if a required ${field} is not found`,()=>{
+                    delete newListing[field]
+                    return supertest(app)
+                        .post('/api/listings/')
+                        .send(newListing)
+                        .expect(400)
+                        .expect(res=>{
+                            expect(res.body).to.eql({
+                                error: { message: `Missing '${field}' in request body.`}
                             })
-                    )
+                        })
+                })
             })
         })
     })

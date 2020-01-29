@@ -9,10 +9,31 @@ const jsonParser = express.json()
 commentsRouter
     .route('/')
     .get((req,res,next)=>{
-        res.json({
+        res.status(400).json({
             error: {message: 'No match_id provided in params.'}
         })
     })
+    .post(jsonParser,(req,res,next)=>{
+        const {match_id, user_id, comment} = req.body;
+        const newComment = {match_id, user_id, comment};
+        for(const[key,value] of Object.entries(newComment)){
+            if(value == null){
+                return res.status(400).json({
+                    error: { message: `Missing '${key}' in request body` }
+                  })
+            }
+        }
+        CommentsService.insertNewComment(
+            req.app.get('db'),
+            newComment
+        )
+            .then(comment=>{
+                res.status(201).json(comment)
+                next()
+            })
+            .catch(next)
+    })
+    
 commentsRouter
     .route('/:match_id')
     .all((req,res,next)=>{
@@ -21,8 +42,14 @@ commentsRouter
             req.params.match_id
         )
             .then(comments=>{
-                res.comments = comments.map(comment=>CommentsService.sanitizeComment(comment))
-                next()
+                if(comments.length){
+                    res.comments = comments.map(comment=>CommentsService.sanitizeComment(comment))
+                    next()
+                }else{
+                    res.status(404).json({
+                        error: {message: 'Match_id not found.'}
+                    })
+                }
             })
     })
     .get((req,res,next)=>{

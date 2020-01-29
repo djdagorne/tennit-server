@@ -24,6 +24,12 @@ usersRouter
                 })
             }
         }
+        const passwordError = UsersService.validatePassword(newUser.password)
+        if(passwordError){
+            return res.status(400).json({
+                error: {message: passwordError}
+            })
+        }
         UsersService.hasUserWithEmail(
             req.app.get('db'), 
             newUser.email
