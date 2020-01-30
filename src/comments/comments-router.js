@@ -37,7 +37,7 @@ commentsRouter
 commentsRouter
     .route('/:match_id')
     .all((req,res,next)=>{
-        CommentsService.getCommentByMatchId(
+        CommentsService.getCommentsByMatchId(
             req.app.get('db'),
             req.params.match_id
         )
@@ -51,6 +51,7 @@ commentsRouter
                     })
                 }
             })
+            .catch(next)
     })
     .get((req,res,next)=>{
         res.json(res.comments)

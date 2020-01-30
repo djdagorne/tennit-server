@@ -270,7 +270,7 @@ describe('Users Endpoints', function() {
                             })
                     })
             })
-            it.only('responds 204 and removes associated images as well',()=>{
+            it('responds 204 and removes associated images as well',()=>{
                 return supertest(app)
                     .delete('/api/users/1')
                     .then(()=>{

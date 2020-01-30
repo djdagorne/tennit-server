@@ -3,7 +3,7 @@ const knex = require('knex')
 const helpers = require('./test-helpers')
 const { testUsers } = helpers.makeThingsFixtures()
 
-describe('Comments Endpoints', function() {
+describe('Comments Endpoints',()=> {
     let db 
     before('make knex instance',()=>{
         db = knex({
@@ -136,6 +136,7 @@ describe('Comments Endpoints', function() {
                 return supertest(app)
                     .post('/api/comments')
                     .send(newComment)
+                    .expect(201)
                     .expect(res=>{
                         expect(res.body.match_id).to.eql(newComment.match_id)
                         expect(res.body.user_id).to.eql(newComment.user_id)

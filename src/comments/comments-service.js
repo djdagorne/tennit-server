@@ -1,7 +1,7 @@
 const xss = require('xss')
 
 const CommentsService = {
-    getCommentByMatchId(knex, match_id){
+    getCommentsByMatchId(knex, match_id){
         return knex.from('tennit_comments').select('*').where('match_id',match_id)
     },
     sanitizeComment(newComment){

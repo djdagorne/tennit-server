@@ -1,8 +1,34 @@
-const xss = require('xss')
+const { isWebUri } = require('valid-url')
 
 const ImagesService = {
-    //get image by user_id
-    //post image
-    //update image
-    //delete image
+    getImageByUserId(knex, user_id){
+        return knex.select('*').from('tennit_images').where({user_id}).first()
+    },
+    validateUrl(newImage){
+        if(newImage.image && !isWebUri(newImage.image)){
+            return false
+        }else{
+            return true
+        }
+    },
+    doesUserExist(knex, user_id){
+        return knex
+            .select('*')
+            .from('tennit_images')
+            .where({user_id})
+            .first()
+    },
+    insertImage(knex, newImage){
+        return knex('tennit_images')
+            .insert(newImage)
+            .returning('*')
+            .then(rows=>{
+                return rows[0]
+            })
+    },
+    updateImage(knex, user_id, newImage){
+        return knex('tennit_images').where({user_id}).update(newImage)
+    }
 }
+
+module.exports = ImagesService;

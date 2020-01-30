@@ -93,16 +93,6 @@ function makeImageArray(listing){
             date_modified: new Date(),
         },
         {
-            image: 'https://loremflickr.com/500/500/landscape?random=2',
-            user_id: listing[0].user_id,
-            date_modified: new Date(),
-        },
-        {
-            image: 'https://loremflickr.com/500/500/landscape?random=3',
-            user_id: listing[0].user_id,
-            date_modified: new Date(),
-        },
-        {
             image: 'https://loremflickr.com/500/500/landscape?random=4',
             user_id: listing[1].user_id,
             date_modified: new Date(),

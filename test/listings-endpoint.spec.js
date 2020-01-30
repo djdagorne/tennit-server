@@ -143,12 +143,12 @@ describe('Listings Endpoints', function() {
                     .from('tennit_users')
                     .then(users=>{
                         const testListings = helpers.makeListingArray(users);
-                        const testList = testListings[0] //working fine
+                        const testListing = testListings[0] //working fine
                         return supertest(app)
                             .post('/api/listings/')
-                            .send(testList)         
+                            .send(testListing)         
                             .expect(res=>{
-                                expect(res.body).to.eql(testList)
+                                expect(res.body).to.eql(testListing)
                             })
                     })
             })
