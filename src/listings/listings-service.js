@@ -2,10 +2,24 @@ const xss = require('xss')
 
 const ListingsService = {
     getAllListings(knex){
-        return knex.select('*').from('tennit_listings')
+        return knex
+            .select('tennit_listings.*','tennit_images.image')
+            .from('tennit_listings')
+            .leftJoin(
+                'tennit_images',
+                'tennit_listings.user_id',
+                'tennit_images.user_id')
     },
     getListingById(knex, user_id){
-        return knex.from('tennit_listings').select('*').where('user_id',user_id).first()
+        return knex
+            .select('tennit_listings.*','tennit_images.image')
+            .from('tennit_listings')
+            .leftJoin(
+                'tennit_images',
+                'tennit_listings.user_id',
+                'tennit_images.user_id')
+            .where('tennit_listings.user_id',user_id)
+            .first()
     },
     insertNewListing(knex, newListing){
         return knex
@@ -16,7 +30,7 @@ const ListingsService = {
                 return rows[0]
             })
     },
-    getSearchResults(listings, province, city, neighborhood, rent){
+    getSearchResults(listings, province, city, rent){
         if(!!province){
             listings = listings.filter(filter=>
                 filter.province.toLowerCase().includes(province.toLowerCase())    
@@ -27,14 +41,9 @@ const ListingsService = {
                 filter.city.toLowerCase().includes(city.toLowerCase())    
             )
         }
-        if(!!neighborhood){
-            listings = listings.filter(filter=>
-                filter.neighborhood.toLowerCase().includes(neighborhood.toLowerCase())    
-            )
-        }
         if(!!rent){
             listings = listings.filter(filter=>
-                Number(filter.rent) >= Number(rent)
+                Number(filter.rent) <= Number(rent)
             )
         }
         if(listings.length > 0){
@@ -50,6 +59,7 @@ const ListingsService = {
     },
     serializeListing(newListing){
         return {
+            ...newListing,
             user_id: newListing.user_id,
             firstname: xss(newListing.firstname),
             lastname: xss(newListing.lastname),

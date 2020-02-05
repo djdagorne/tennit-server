@@ -23,13 +23,25 @@ commentsRouter
                   })
             }
         }
-        CommentsService.insertNewComment(
+        CommentsService.inspectMatch(
             req.app.get('db'),
-            newComment
+            newComment.match_id
         )
-            .then(comment=>{
-                res.status(201).json(comment)
-                next()
+            .then(match=>{
+                if(match.user1_id == newComment.user_id || match.user2_id == newComment.user_id){
+                    CommentsService.insertNewComment(
+                        req.app.get('db'),
+                        newComment
+                    )
+                        .then(comment=>{
+                            res.status(201).json(comment)
+                        })
+                        .catch(next)
+                }else{
+                    res.status(400).json({
+                        error:{message: 'User is not part of this match.'}
+                    })
+                }
             })
             .catch(next)
     })

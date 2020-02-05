@@ -66,17 +66,17 @@ describe('Users Endpoints', function() {
                     .expect(404, { error: { message: `User doesn't exist.`}})
             })
         })
-    })
-    describe('POST /api/users/',()=>{
+    }) //TODO hash passwords, get auth working
+    describe.only('POST /api/users/',()=>{
         it('it creates a new user, responds with 201 and the user object',()=>{
             return supertest(app)
                 .post('/api/users')
                 .send(testUsers[1])
                 .expect(201)
                 .expect(res=>{
+                    console.log(res.body)
                     expect(res.body.email).to.eql(testUsers[1].email)
                     expect(res.body).to.have.property('id')
-                    expect(res.header.location).to.eql(`/`)
                 })
         })
         context('given duplicate user emails',()=>{

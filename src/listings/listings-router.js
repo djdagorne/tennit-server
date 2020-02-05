@@ -9,14 +9,13 @@ listingRouter
     .get((req,res,next)=>{
         ListingsService.getAllListings(req.app.get('db'))
             .then(allListings=>{
-                const {province, city, neighborhood, rent} = req.query
-                if(province || city || neighborhood || rent){
+                const {province, city, rent} = req.query
+                if(province || city ||  rent){
                     res.json(
                         ListingsService.getSearchResults(
                             allListings,
                             province,
                             city,
-                            neighborhood,
                             rent
                         )
                     )
@@ -30,10 +29,12 @@ listingRouter
     })
     .post(jsonParser, (req,res,next)=>{
         const {testListings} = helpers.makeThingsFixtures();
+        const baseKeys = ['fistname','lastname','usergender','prefgender','age','province','city','listing','userblurb']
+        const listingKeys = ['neighborhood','rent','blurb']
         const newListing = req.body;
         if(Object.entries(newListing).length > 0){
             for(const [key, value] of Object.entries(testListings[0])){
-                if(newListing[key] == null){
+                if(value == null){
                     return res.status(400).json({
                         error: { message: `Missing '${key}' in request body.`}
                     })
@@ -71,14 +72,11 @@ listingRouter
         const testUsers = helpers.makeUserArray()
         const testListing = helpers.makeListingArray(testUsers);
         const listingKeys = Object.keys(testListing[0])
-        //inspect keys of req.body
         for(const [key] of Object.entries(newListingData)){
-            //make new array to verify matching keys, deleting keys  newarray.length === 0.
             if(listingKeys.filter(sampleKey => sampleKey === key).length === 0){ 
                 delete newListingData[key]
             }
         }
-        //assuming any keys passed filtertest, follow happy path
         if(Object.keys(newListingData).length > 0){
             ListingsService.updateListing(
                 req.app.get('db'),

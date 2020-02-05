@@ -168,7 +168,7 @@ describe('Images Endpoints',()=>{
             })
         })
     })
-    describe.only('PATCH /api/images/',()=>{
+    describe('PATCH /api/images/',()=>{
         context('given populated database',()=>{
             beforeEach('insert the users, listings, images, matches and comments',()=>{
                 return db

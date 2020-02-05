@@ -10,11 +10,25 @@ const MatchesService = {
     },
     searchMatchesByUserId(knex, user_id){
         return knex
-            .select('*')
-            .from('tennit_matches')
-            .where('user1_id',user_id)
-            .or
-            .where('user2_id',user_id)
+            .raw(`
+                SELECT 
+                    m.id, 
+                    m.user1_id, 
+                    m.user2_id, 
+                    l.firstname AS firstname_1, 
+                    l.lastname AS lastname_1, 
+                    l2.firstname AS firstname_2, 
+                    l2.lastname AS lastname_2
+                FROM tennit_matches m 
+                LEFT JOIN tennit_listings l ON m.user1_id = l.user_id
+                LEFT JOIN tennit_listings l2 ON m.user2_id = l2.user_Id
+                WHERE m.user1_id = ${user_id}
+                OR 
+                m.user2_id = ${user_id};
+            `)
+            .then(res=>{
+                return res.rows
+            })
     },
     deleteMatchById(knex, id){
         return knex('tennit_matches')

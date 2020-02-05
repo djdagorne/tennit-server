@@ -9,6 +9,9 @@ const UsersService = {
     getUserById(knex, id){
         return knex.from('tennit_users').select('*').where('id',id).first()
     },
+    getUserByEmail(knex, email){
+        return knex.from('tennit_users').select('*').where('email',email).first()
+    },
     insertNewUser(knex, newUser){
         return knex
             .insert(newUser)

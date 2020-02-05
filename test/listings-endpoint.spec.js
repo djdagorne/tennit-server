@@ -130,7 +130,7 @@ describe('Listings Endpoints', function() {
             })
         })
     })
-    describe('POST /api/listing',()=>{
+    describe.only('POST /api/listing',()=>{
         context('given users in the db',()=>{
             beforeEach('insert the users and malicious listing',()=>{
                 return db
@@ -144,6 +144,7 @@ describe('Listings Endpoints', function() {
                     .then(users=>{
                         const testListings = helpers.makeListingArray(users);
                         const testListing = testListings[0] //working fine
+                        console.log(testListing)
                         return supertest(app)
                             .post('/api/listings/')
                             .send(testListing)         

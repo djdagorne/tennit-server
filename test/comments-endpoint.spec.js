@@ -138,8 +138,8 @@ describe('Comments Endpoints',()=> {
                     .send(newComment)
                     .expect(201)
                     .expect(res=>{
-                        expect(res.body.match_id).to.eql(newComment.match_id)
-                        expect(res.body.user_id).to.eql(newComment.user_id)
+                        expect(res.body[0].match_id).to.eql(newComment.match_id)
+                        expect(res.body[0].user_id).to.eql(newComment.user_id)
                     })
             })
             const requiredFields = ['match_id','user_id','comment']
@@ -161,6 +161,22 @@ describe('Comments Endpoints',()=> {
                             })
                         })
                 })
+            })
+            it('returns an error when a different user_id from the matchs users tries to post',()=>{
+                const newComment = {
+                    match_id: 1,
+                    user_id: 3,
+                    comment: 'test123'
+                }
+                return supertest(app)
+                    .post('/api/comments')
+                    .send(newComment)
+                    .expect(400)
+                    .expect(res=>{
+                        expect(res.body).to.eql({
+                            error:{message: 'User is not part of this match.'}
+                        })
+                    })
             })
         })
     })
