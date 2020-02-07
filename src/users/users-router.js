@@ -35,16 +35,16 @@ usersRouter
         
     })
     .post(jsonParser, (req,res,next)=>{
-        const testUser = helpers.makeUserArray();
-        const newUser = req.body;
-        for(const [key, value] of Object.entries(testUser[0])){
-            if(newUser[key] == null){
+        const {email, password} = req.body;
+        //console.log('$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$', req.body)
+        for (const field of ['email', 'password']){
+            if(!req.body[field]){
                 return res.status(400).json({
-                    error: { message: `Missing '${key}' in request body.`}
+                    error: {message: `Missing '${field}' in request body.`}
                 })
             }
-        }
-        const passwordError = UsersService.validatePassword(newUser.password)
+        }  
+        const passwordError = UsersService.validatePassword(password)
         if(passwordError){
             return res.status(400).json({
                 error: {message: passwordError}
@@ -52,7 +52,7 @@ usersRouter
         }
         UsersService.hasUserWithEmail(
             req.app.get('db'), 
-            newUser.email
+            email
         )
             .then(hasDupeEmail => {
                 if(hasDupeEmail){
@@ -60,15 +60,23 @@ usersRouter
                         error: { message: `Email already in use.` }
                     })
                 }
-                return UsersService.insertNewUser(
-                    req.app.get('db'),
-                    newUser
-                )
-                    .then(user => {
-                        res
-                            .status(201)
-                            .json(user)
-                    })
+                // return UsersService.hashPassword(password)
+                //     .then(hashedPassword => {
+                //         const newUser = {
+                //             email,
+                //             password: hashedPassword
+                //         }
+                
+                        return UsersService.insertNewUser(
+                            req.app.get('db'),
+                            //newUser
+                            req.body
+                        )
+                            .then(user => {
+                                res.status(201).json(user)
+                             })
+                    // })
+                
                     
             })
             .catch(next)

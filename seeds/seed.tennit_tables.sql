@@ -10,9 +10,9 @@ TRUNCATE
 INSERT INTO tennit_users (email, password)
 VALUES
     ('john@email.com','AAaa11!!'),
-    ('susan@email.com','AAaa11!!'),
-    ('gertrude@email.com','AAaa11!!'),
-    ('margret@email.com','AAaa11!!');
+    ('susan@email.com','$2a$12$kJrJLlPChs01Vrw4bYXlOus5pJITEVYQY5PadR4FCn.RfiXcAbfsy'),
+    ('gertrude@email.com','$2a$12$kJrJLlPChs01Vrw4bYXlOus5pJITEVYQY5PadR4FCn.RfiXcAbfsy'),
+    ('margret@email.com','$2a$12$kJrJLlPChs01Vrw4bYXlOus5pJITEVYQY5PadR4FCn.RfiXcAbfsy'); 
 
 INSERT INTO tennit_listings (user_id, firstname, lastname, usergender, prefgender, age, province, city, neighborhood, rent, listing, userblurb, blurb)
 VALUES 

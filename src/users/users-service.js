@@ -26,6 +26,9 @@ const UsersService = {
             .where({id})
             .delete()
     },
+    hashPassword(password){
+        return bcrypt.hash(password, 12)
+    },
     updateUser(knex, id, newUserFields){
         return knex('tennit_listings')
             .where({id})

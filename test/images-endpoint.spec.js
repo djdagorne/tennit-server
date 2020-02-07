@@ -8,7 +8,7 @@ describe('Images Endpoints',()=>{
     before('make knex instance',()=>{
         db = knex({
             client: 'pg',
-            connection: process.env.TEST_DB_URL,
+            connection: process.env.REACT_APP_TEST_DB_URL,
         })
         app.set('db', db)
     })
@@ -96,20 +96,23 @@ describe('Images Endpoints',()=>{
                             })
                     })
             })
-            it('inserts image into db',()=> {
+            it.only('inserts image into db',()=> {
                 const newImage = {
                     image: 'https://loremflickr.com/500/500/landscape?random=1',
                     user_id: 1,
-                    date_modified: new Date(),
                 }
                 return supertest(app)
                     .post('/api/images')
                     .send(newImage)
                     .expect(201)
-                    .expect(res=>{
-                        expect(res.body.image).to.eql(newImage.image)
+                    .then(()=>{
+                        return supertest(app)
+                            .get('/api/images/1')
+                            .expect(res=>{
+                                expect(res.body.image).to.eql(newImage.image)
+                            })
+                            
                     })
-                   
             })
             it('gives a 400 & error code if URL is invalid format',()=> {
                 const newImage = {
@@ -205,7 +208,10 @@ describe('Images Endpoints',()=>{
                 return supertest(app)
                     .patch(`/api/images/1`)
                     .send(newFields)
-                    .expect(204)
+                    .expect(200)
+                    .expect(res=>{
+                        expect(res.body.image).to.eql(newFields.image)
+                    })
                     .then(()=>{
                         return supertest(app)
                             .get('/api/images/1')

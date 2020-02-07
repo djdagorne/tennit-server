@@ -8,7 +8,7 @@ describe('Listings Endpoints', function() {
     before('make knex instance',()=>{
         db = knex({
             client: 'pg',
-            connection: process.env.TEST_DB_URL,
+            connection: process.env.REACT_APP_TEST_DB_URL,
         })
         app.set('db', db)
     })
@@ -63,10 +63,10 @@ describe('Listings Endpoints', function() {
             it('GET /api/listings/ can find listings by province, city, and rent',()=>{
                 return supertest(app)
                     .get('/api/listings/')
-                    .query({rent: 1500})
+                    .query({rent: 800})
                     .expect(200)
                     .expect(res=>{
-                        expect(res.body[0].rent).to.eql(1500)
+                        expect(res.body[0].rent).to.eql(700)
                     })
             })
             it('GET /api/listings/ returns an error when search finds no matches',()=>{
@@ -121,16 +121,14 @@ describe('Listings Endpoints', function() {
                     .get('/api/listings/1')
                     .expect(200)
                     .expect(res=>{
-                        expect(res.body).to.eql({
-                            ...expectedListing,
-                            user_id: 1
-                        })
+                        expect(res.body.listing).to.eql(expectedListing.listing)
+                        expect(res.body.firstname).to.eql(expectedListing.firstname)
                     })
 
             })
         })
     })
-    describe.only('POST /api/listing',()=>{
+    describe('POST /api/listing',()=>{
         context('given users in the db',()=>{
             beforeEach('insert the users and malicious listing',()=>{
                 return db
@@ -144,7 +142,6 @@ describe('Listings Endpoints', function() {
                     .then(users=>{
                         const testListings = helpers.makeListingArray(users);
                         const testListing = testListings[0] //working fine
-                        console.log(testListing)
                         return supertest(app)
                             .post('/api/listings/')
                             .send(testListing)         
@@ -177,14 +174,14 @@ describe('Listings Endpoints', function() {
                             })
                     })
             })
-            const requiredFields = Object.keys(testListings[0])
-            requiredFields.forEach(field=>{
+            const baseKeys = ['user_id','firstname','lastname','usergender','prefgender','age','province','city','userblurb','listing']
+            baseKeys.forEach(field=>{
                 const testListings = helpers.makeListingArray(testUsers)
                 const newListing = {
                     ...testListings[0],
-                    user_id: 1 
+                    user_id: 1, 
                 }
-                it(`returns an error code if a required ${field} is not found`,()=>{
+                it(`returns an error code if a required '${field}' field is not found`,()=>{
                     delete newListing[field]
                     return supertest(app)
                         .post('/api/listings/')
@@ -194,6 +191,44 @@ describe('Listings Endpoints', function() {
                             expect(res.body).to.eql({
                                 error: { message: `Missing '${field}' in request body.`}
                             })
+                        })
+                })
+            })
+            const listingKeys = ['rent','blurb']
+            listingKeys.forEach(field =>{
+                const testListings = helpers.makeListingArray(testUsers)
+                const newListing = {
+                    ...testListings[0],
+                    user_id: 1, 
+                }
+                it(`returns an error code if 'listing' is true but ${field} is empty`,()=>{
+                    delete newListing[field]
+                    return supertest(app)
+                        .post('/api/listings/')
+                        .send(newListing)
+                        .expect(400)
+                        .expect(res=>{
+                            expect(res.body).to.eql({
+                                error: { message: `Missing '${field}' in request body.`}
+                            })
+                        })
+                })
+            })
+            listingKeys.forEach(field =>{
+                const testListings = helpers.makeListingArray(testUsers)
+                const newListing = {
+                    ...testListings[3],
+                    user_id: 4, 
+                }
+                it(`returns a 201 if 'listing' is false but ${field} is empty`,()=>{
+                    delete newListing[field]
+                    return supertest(app)
+                        .post('/api/listings/')
+                        .send(newListing)
+                        .expect(201)
+                        .expect(res=>{
+                            expect(res.body.user_id).to.eql(newListing.user_id)
+                            expect(res.body.listing).to.eql(newListing.listing)
                         })
                 })
             })

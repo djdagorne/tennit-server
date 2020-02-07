@@ -27,7 +27,13 @@ const ImagesService = {
             })
     },
     updateImage(knex, user_id, newImage){
-        return knex('tennit_images').where({user_id}).update(newImage)
+        return knex('tennit_images')
+            .where({user_id})
+            .update(newImage)
+            .returning('*')
+            .then(rows=>{
+                return rows[0]
+            })
     }
 }
 

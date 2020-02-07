@@ -9,7 +9,7 @@ describe('Users Endpoints', function() {
     before('make knex instance',()=>{
         db = knex({
             client: 'pg',
-            connection: process.env.TEST_DB_URL,
+            connection: process.env.REACT_APP_TEST_DB_URL,
         })
         app.set('db', db)
     })
@@ -67,14 +67,13 @@ describe('Users Endpoints', function() {
             })
         })
     }) //TODO hash passwords, get auth working
-    describe.only('POST /api/users/',()=>{
+    describe('POST /api/users/',()=>{
         it('it creates a new user, responds with 201 and the user object',()=>{
             return supertest(app)
                 .post('/api/users')
                 .send(testUsers[1])
                 .expect(201)
                 .expect(res=>{
-                    console.log(res.body)
                     expect(res.body.email).to.eql(testUsers[1].email)
                     expect(res.body).to.have.property('id')
                 })

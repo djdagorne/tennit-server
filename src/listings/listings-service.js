@@ -56,6 +56,10 @@ const ListingsService = {
         return knex('tennit_listings')
             .where({user_id})
             .update(newListingFields)
+            .returning('*')
+            .then(rows=>{
+                return rows[0]
+            })
     },
     serializeListing(newListing){
         return {

@@ -30,10 +30,10 @@ function makeListingArray(user){
             age: 20,
             province: 'Ontario',
             city: 'Toronto',
+            userblurb: 'i am user!',
+            listing: true,
             neighborhood: 'Leaside',
             rent: 1000,
-            listing: true,
-            userblurb: 'i am user!',
             blurb: 'this is setting description!',
         },
         {
@@ -76,8 +76,8 @@ function makeListingArray(user){
             province: 'Ontario',
             city: 'Toronto',
             neighborhood: 'Yorkdale',
-            rent: 700,
             listing: false,
+            rent: 700,
             userblurb: 'i am user!',
             blurb: 'this is setting description!',
         }
@@ -93,17 +93,17 @@ function makeImageArray(listing){
             date_modified: new Date(),
         },
         {
-            image: 'https://loremflickr.com/500/500/landscape?random=4',
+            image: 'https://loremflickr.com/500/500/landscape?random=2',
             user_id: listing[1].user_id,
             date_modified: new Date(),
         },
         {
-            image: 'https://loremflickr.com/500/500/landscape?random=5',
+            image: 'https://loremflickr.com/500/500/landscape?random=3',
             user_id: listing[2].user_id,
             date_modified: new Date(),
         },
         {
-            image: 'https://loremflickr.com/500/500/landscape?random=6',
+            image: 'https://loremflickr.com/500/500/landscape?random=4',
             user_id: listing[3].user_id,
             date_modified: new Date(),
         },

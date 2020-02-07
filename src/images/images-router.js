@@ -87,8 +87,8 @@ imagesRouter
                     req.params.user_id,
                     newImage
                 )
-                    .then(rows=>{
-                        res.status(204).end()
+                    .then(image=>{
+                        res.status(200).send(image)
                     })
                     .catch(next)
             }else{

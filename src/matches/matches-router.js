@@ -17,7 +17,7 @@ matchesRouter
                     if(matches.length > 0){
                         res.json(matches)
                     }else{
-                        res.status(404).json({
+                        res.status(204).json({
                             error: {message: `No match found.`}
                         })
                     }

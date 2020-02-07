@@ -28,19 +28,34 @@ listingRouter
             .catch(next)
     })
     .post(jsonParser, (req,res,next)=>{
-        const {testListings} = helpers.makeThingsFixtures();
-        const baseKeys = ['fistname','lastname','usergender','prefgender','age','province','city','listing','userblurb']
-        const listingKeys = ['neighborhood','rent','blurb']
+        const baseKeys = ['user_id','firstname','lastname','usergender','prefgender','age','province','city','listing','userblurb']
+        const listingKeys = ['rent','blurb']
         const newListing = req.body;
-        if(Object.entries(newListing).length > 0){
-            for(const [key, value] of Object.entries(testListings[0])){
-                if(value == null){
+        if(Object.keys(newListing).length > 0){
+            for(const field of baseKeys){
+                if(newListing[field] == null){
                     return res.status(400).json({
-                        error: { message: `Missing '${key}' in request body.`}
+                        error: { message: `Missing '${field}' in request body.`}
                     })
                 }
+                if(newListing.listing === true){
+                    for(const field of listingKeys){
+                        if(newListing[field] == null){
+                            return res.status(400).json({
+                                error: { message: `Missing '${field}' in request body.`}
+                            })
+                        }
+                    }
+                }
             }
-            res.json(ListingsService.serializeListing(newListing))
+            ListingsService.insertNewListing(
+                req.app.get('db'),
+                ListingsService.serializeListing(newListing)
+            )
+                .then(listing=>{
+                    res.status(201).json(listing)
+                })
+            
         }else{
             res.status(400).json({
                 error: {message: 'Request body must supply a listing object.'}
