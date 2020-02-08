@@ -3,15 +3,17 @@ const helpers = require('../../test/test-helpers')
 const ImagesService = require('./images-service')
 const imagesRouter = express.Router()
 const jsonParser = express.json()
+const {requireAuth} = require('../middleware/jwt-auth')
+
 
 imagesRouter
     .route('/')
-    .get((req,res,next)=>{
+    .get(requireAuth, (req,res,next)=>{
         res.status(400).json({
             error: {message: 'No user_id provided in params.'}
         })
     })
-    .post(jsonParser,(req,res,next)=>{
+    .post(requireAuth, jsonParser,(req,res,next)=>{
         const {image, user_id} = req.body;
         const newImage = {image, user_id};
         for(const [key, value] of Object.entries(newImage)){
@@ -51,7 +53,7 @@ imagesRouter
 
 imagesRouter
     .route('/:user_id')
-    .all((req,res,next)=>{
+    .all(requireAuth, (req,res,next)=>{
         ImagesService.getImageByUserId(
             req.app.get('db'),
             req.params.user_id

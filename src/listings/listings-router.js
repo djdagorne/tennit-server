@@ -3,10 +3,11 @@ const ListingsService = require('./listings-service')
 const helpers = require('../../test/test-helpers')
 const listingRouter = express.Router()
 const jsonParser = express.json()
+const {requireAuth} = require('../middleware/jwt-auth')
 
 listingRouter
     .route('/')
-    .get((req,res,next)=>{
+    .get(requireAuth, (req,res,next)=>{
         ListingsService.getAllListings(req.app.get('db'))
             .then(allListings=>{
                 const {province, city, rent} = req.query
@@ -27,7 +28,7 @@ listingRouter
             })
             .catch(next)
     })
-    .post(jsonParser, (req,res,next)=>{
+    .post(requireAuth, jsonParser, (req,res,next)=>{
         const baseKeys = ['user_id','firstname','lastname','usergender','prefgender','age','province','city','listing','userblurb']
         const listingKeys = ['rent','blurb']
         const newListing = req.body;
@@ -65,7 +66,7 @@ listingRouter
     
 listingRouter
     .route('/:user_id')
-    .all((req,res,next)=>{
+    .all(requireAuth, (req,res,next)=>{
         ListingsService.getListingById(
             req.app.get('db'), 
             req.params.user_id

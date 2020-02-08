@@ -59,6 +59,7 @@ describe('Comments Endpoints',()=> {
             it('returns an empty array with a 200 when no comments exist, but match exists',()=>{
                 return supertest(app)
                     .get('/api/comments/5')
+                    .set('Authorization', helpers.makeAuthHeader(testUsers[0]))
                     .expect(200)
                     .expect(res=>{
                         expect(res.body).to.eql([])
@@ -67,6 +68,7 @@ describe('Comments Endpoints',()=> {
             it('it returns all comments associated with the correct match_id',()=>{
                 return supertest(app)
                     .get('/api/comments/1')
+                    .set('Authorization', helpers.makeAuthHeader(testUsers[0]))
                     .expect(200)
                     .expect(res=>{
                         expect(res.body.length).to.eql(4)
@@ -76,6 +78,7 @@ describe('Comments Endpoints',()=> {
             it('it returns the correct error code when given a match_id that doesnt exist',()=>{
                 return supertest(app)
                     .get('/api/comments/555555555')
+                    .set('Authorization', helpers.makeAuthHeader(testUsers[0]))
                     .expect(404)
                     .expect(res=>{
                         expect(res.body).to.eql({
@@ -86,6 +89,7 @@ describe('Comments Endpoints',()=> {
             it('it returns the correct error code when not given a match_id',()=>{
                 return supertest(app)
                     .get('/api/comments/')
+                    .set('Authorization', helpers.makeAuthHeader(testUsers[0]))
                     .expect(400)
                     .expect(res=>{
                         expect(res.body).to.eql({
@@ -143,6 +147,7 @@ describe('Comments Endpoints',()=> {
                 }
                 return supertest(app)
                     .post('/api/comments')
+                    .set('Authorization', helpers.makeAuthHeader(testUsers[0]))
                     .send(newComment)
                     .expect(201)
                     .expect(res=>{
@@ -161,6 +166,7 @@ describe('Comments Endpoints',()=> {
                     delete newComment[field]
                     return supertest(app)
                         .post('/api/comments')
+                        .set('Authorization', helpers.makeAuthHeader(testUsers[0]))
                         .send(newComment)
                         .expect(400)
                         .expect(res=>{
@@ -178,6 +184,7 @@ describe('Comments Endpoints',()=> {
                 }
                 return supertest(app)
                     .post('/api/comments')
+                    .set('Authorization', helpers.makeAuthHeader(testUsers[0]))
                     .send(newComment)
                     .expect(400)
                     .expect(res=>{

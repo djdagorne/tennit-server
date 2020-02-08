@@ -4,10 +4,11 @@ const MatchesService = require('./matches-service')
 const UsersService = require('../users/users-service')
 const matchesRouter = express.Router()
 const jsonParser = express.json()
+const {requireAuth} = require('../middleware/jwt-auth')
 
 matchesRouter 
     .route('/')
-    .get((req,res,next)=>{
+    .get(requireAuth, (req,res,next)=>{
         const {user_id} = req.query
         if(Number(user_id)){
             UsersService.getUserById(
@@ -46,7 +47,7 @@ matchesRouter
             })
         }
     })
-    .post(jsonParser, (req,res,next)=>{
+    .post(requireAuth, jsonParser, (req,res,next)=>{
         const {user1_id, user2_id} = req.body;
         if(Number(user1_id) && Number(user2_id)){
             return MatchesService.checkExistingMatch(
@@ -80,7 +81,7 @@ matchesRouter
 
 matchesRouter
     .route('/:match_id')
-    .all((req,res,next)=>{
+    .all(requireAuth, (req,res,next)=>{
         MatchesService.getMatchById(
             req.app.get('db'),
             req.params.match_id

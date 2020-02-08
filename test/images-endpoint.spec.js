@@ -47,6 +47,7 @@ describe('Images Endpoints',()=>{
             it('returns the image object and a 200',()=>{
                 return supertest(app)
                     .get('/api/images/1')
+                    .set('Authorization', helpers.makeAuthHeader(testUsers[0]))
                     .expect(200)
                     .expect(res=>{
                         expect(res.body.user_id).to.eql(1)
@@ -57,6 +58,7 @@ describe('Images Endpoints',()=>{
             it('returns a 404 & error code when given a bad user_id',()=>{
                 return supertest(app)
                     .get('/api/images/69')
+                    .set('Authorization', helpers.makeAuthHeader(testUsers[0]))
                     .expect(404)
                     .expect(res=>{
                         expect(res.body).to.eql({
@@ -67,6 +69,7 @@ describe('Images Endpoints',()=>{
             it('returns a 400 & error when given no params',()=>{
                 return supertest(app)
                     .get('/api/images/')
+                    .set('Authorization', helpers.makeAuthHeader(testUsers[0]))
                     .expect(400)
                     .expect(res=>{
                         expect(res.body).to.eql({
@@ -103,11 +106,13 @@ describe('Images Endpoints',()=>{
                 }
                 return supertest(app)
                     .post('/api/images')
+                    .set('Authorization', helpers.makeAuthHeader(testUsers[0]))
                     .send(newImage)
                     .expect(201)
                     .then(()=>{
                         return supertest(app)
                             .get('/api/images/1')
+                            .set('Authorization', helpers.makeAuthHeader(testUsers[0]))
                             .expect(res=>{
                                 expect(res.body.image).to.eql(newImage.image)
                             })
@@ -122,6 +127,7 @@ describe('Images Endpoints',()=>{
                 }
                 return supertest(app)
                     .post('/api/images')
+                    .set('Authorization', helpers.makeAuthHeader(testUsers[0]))
                     .send(newImage)
                     .expect(400)
                     .expect(res=>{
@@ -139,6 +145,7 @@ describe('Images Endpoints',()=>{
                     delete newImage[field]
                     return supertest(app)
                         .post('/api/images')
+                        .set('Authorization', helpers.makeAuthHeader(testUsers[0]))
                         .send(newImage)
                         .expect(400)
                         .expect(res=>{
@@ -160,6 +167,7 @@ describe('Images Endpoints',()=>{
                     .then(()=>
                         supertest(app)
                             .post('/api/images')
+                            .set('Authorization', helpers.makeAuthHeader(testUsers[0]))
                             .send(newImage)
                             .expect(400)
                             .expect(res=>{
@@ -207,6 +215,7 @@ describe('Images Endpoints',()=>{
                 }
                 return supertest(app)
                     .patch(`/api/images/1`)
+                    .set('Authorization', helpers.makeAuthHeader(testUsers[0]))
                     .send(newFields)
                     .expect(200)
                     .expect(res=>{
@@ -215,6 +224,7 @@ describe('Images Endpoints',()=>{
                     .then(()=>{
                         return supertest(app)
                             .get('/api/images/1')
+                            .set('Authorization', helpers.makeAuthHeader(testUsers[0]))
                             .expect(res=>{
                                 expect(res.body.image).to.eql(newFields.image)
                             })
@@ -223,6 +233,7 @@ describe('Images Endpoints',()=>{
             it('returns the correct error code if no fields are given',()=>{
                 return supertest(app)
                     .patch('/api/images/1')
+                    .set('Authorization', helpers.makeAuthHeader(testUsers[0]))
                     .send({})
                     .expect(400)
                     .expect(res=>{
@@ -234,6 +245,7 @@ describe('Images Endpoints',()=>{
             it('returns the correct error code if a bad URL is supplied',()=>{
                 return supertest(app)
                     .patch('/api/images/1')
+                    .set('Authorization', helpers.makeAuthHeader(testUsers[0]))
                     .send({image: 'hasd'})
                     .expect(400)
                     .expect(res=>{

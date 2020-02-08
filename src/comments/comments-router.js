@@ -3,9 +3,9 @@ const helpers = require('../../test/test-helpers')
 const CommentsService = require('./comments-service')
 const commentsRouter = express.Router()
 const jsonParser = express.json()
+const {requireAuth} = require('../middleware/jwt-auth')
 
-//then make the comments part of the endpoint, images part (mostly reusing code here)
-// and auth part which will need a refresher but w.e
+//TODO make .all(check___Exists instead of these really long if statements?)
 commentsRouter
     .route('/')
     .get((req,res,next)=>{
@@ -13,7 +13,7 @@ commentsRouter
             error: {message: 'No match_id provided in params.'}
         })
     })
-    .post(jsonParser,(req,res,next)=>{
+    .post(requireAuth, jsonParser,(req,res,next)=>{
         const {match_id, user_id, comment} = req.body;
         const newComment = {match_id, user_id, comment};
         for(const[key,value] of Object.entries(newComment)){
@@ -48,7 +48,7 @@ commentsRouter
     
 commentsRouter
     .route('/:match_id')
-    .all((req,res,next)=>{
+    .all(requireAuth, (req,res,next)=>{
         CommentsService.inspectMatch(
             req.app.get('db'),
             req.params.match_id

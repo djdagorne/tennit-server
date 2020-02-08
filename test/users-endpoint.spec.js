@@ -17,31 +17,6 @@ describe('Users Endpoints', function() {
     afterEach('clean the tables',()=> db.raw('TRUNCATE tennit_users, tennit_listings, tennit_images, tennit_matches, tennit_comments RESTART IDENTITY CASCADE'))
     after('disconnect from db',()=> db.destroy())
     
-    describe('GET /api/users',()=>{
-        context('Given there are users in the database',()=>{
-            beforeEach('insert the users',()=>{
-                return db
-                    .into('tennit_users')
-                    .insert(testUsers)
-            })
-            it('GET /users responds with 200 and all the users',()=>{
-                return supertest(app)
-                    .get('/api/users/')
-                    .expect(200)
-                    .expect(res => {
-                        expect(res.body[0]).to.have.property('id')
-                        expect(res.body[0].email).to.have.eql(testUsers[0].email)
-                    })
-            })
-        })
-        context('Given there are no users in the database',()=>{
-            it('responds with 200 and empty array',()=>{
-                return supertest(app)
-                    .get(`/api/users/`)
-                    .expect(200, [])
-            })
-        })
-    })
     describe('GET /api/users/:user_id',()=>{
         context('Given there are users in the database',()=>{
             beforeEach('insert the users',()=>{
@@ -66,7 +41,7 @@ describe('Users Endpoints', function() {
                     .expect(404, { error: { message: `User doesn't exist.`}})
             })
         })
-    }) //TODO hash passwords, get auth working
+    })
     describe('POST /api/users/',()=>{
         it('it creates a new user, responds with 201 and the user object',()=>{
             return supertest(app)
@@ -167,7 +142,7 @@ describe('Users Endpoints', function() {
             })
         })
     })
-    describe('DELETE /api/users/:user_id',()=>{
+    describe.only('DELETE /api/users/:user_id',()=>{
         context('given there are users in the database',()=>{
             beforeEach('insert the users, listings, images, matches and comments',()=>{
                 return db
@@ -218,10 +193,12 @@ describe('Users Endpoints', function() {
                 const expectedUsers = testUsers.slice(1)
                 return supertest(app)
                     .delete('/api/users/1')
+                    .set('Authorization', helpers.makeAuthHeader(testUsers[0]))
                     .expect(204)
                     .then(()=>
                         supertest(app)
                             .get(`/api/users/`)
+                            .set('Authorization', helpers.makeAuthHeader(testUsers[0]))
                             .expect(200)
                             .expect(res=>{
                                 expect(res.body[0].id).to.eql(2)
@@ -231,10 +208,13 @@ describe('Users Endpoints', function() {
             })
             it('responds 204 removes the associated listings as well',()=>{
                 return supertest(app)
-                    .delete('/api/users/1')
+                    .delete('/api/users/2')
+                    .set('Authorization', helpers.makeAuthHeader(testUsers[0]))
+                    .expect(204)
                     .then(()=>
                         supertest(app)
-                            .get('/api/listings/1')
+                            .get('/api/listings/2')
+                            .set('Authorization', helpers.makeAuthHeader(testUsers[0]))
                             .expect(404)
                             .expect(res=>{
                                 expect(res.body).to.eql({ error: { message: `Listing doesn't exist.`}})
@@ -243,11 +223,13 @@ describe('Users Endpoints', function() {
             })
             it('responds 204 and removes associated matches as well',()=>{
                 return supertest(app)
-                    .delete('/api/users/1')
+                    .delete('/api/users/2')
+                    .set('Authorization', helpers.makeAuthHeader(testUsers[0]))
                     .expect(204)
                     .then(()=>
                         supertest(app)
-                            .get('/api/matches/?user_id=1')
+                            .get('/api/matches/?user_id=2')
+                            .set('Authorization', helpers.makeAuthHeader(testUsers[0]))
                             .expect(404)
                             .expect(res=>{
                                 expect(res.body).to.eql({
@@ -259,6 +241,7 @@ describe('Users Endpoints', function() {
             it('responds 204 and removes associated comments as well',()=>{
                 return supertest(app)
                     .delete('/api/users/2')
+                    .set('Authorization', helpers.makeAuthHeader(testUsers[0]))
                     .then(()=>{
                         return db
                             .select('*')
@@ -273,6 +256,7 @@ describe('Users Endpoints', function() {
             it('responds 204 and removes associated images as well',()=>{
                 return supertest(app)
                     .delete('/api/users/1')
+                    .set('Authorization', helpers.makeAuthHeader(testUsers[0]))
                     .then(()=>{
                         return db
                             .select('*')
@@ -283,13 +267,6 @@ describe('Users Endpoints', function() {
                                 })
                             })
                     })
-            })
-        })
-        context('given an empty database',()=>{
-            it('responds with 404',()=>{
-                return supertest(app)
-                    .delete(`/api/users/1`)
-                    .expect(404, { error: { message: `User doesn't exist.`}})
             })
         })
     })

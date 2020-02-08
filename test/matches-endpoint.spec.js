@@ -49,6 +49,7 @@ describe('Matches Endpoints', function() {
             it('given a user_id, it finds all matches associated with that user',()=>{
                 return supertest(app)
                     .get(`/api/matches/`)
+                    .set('Authorization', helpers.makeAuthHeader(testUsers[0]))
                     .query({user_id:1})
                     .expect(200)
                     .expect(res => 
@@ -58,6 +59,7 @@ describe('Matches Endpoints', function() {
             it('given a wrong user_id in the query, it gives the correct error code',()=>{
                 return supertest(app)
                     .get('/api/matches/')
+                    .set('Authorization', helpers.makeAuthHeader(testUsers[0]))
                     .query({user_id:11111111})
                     .expect(404)
                     .expect(res => 
@@ -69,6 +71,7 @@ describe('Matches Endpoints', function() {
             it('given no user_id in the query, it gives the correct error code',()=>{
                 return supertest(app)
                     .get('/api/matches/')
+                    .set('Authorization', helpers.makeAuthHeader(testUsers[0]))
                     .expect(404)
                     .expect(res=>
                         expect(res.body).to.eql({
@@ -79,6 +82,7 @@ describe('Matches Endpoints', function() {
             it('given an invalid format for the user_id in the query, it gives the correct error code',()=>{
                 return supertest(app)
                     .get('/api/matches/')
+                    .set('Authorization', helpers.makeAuthHeader(testUsers[0]))
                     .query({user_id:'SCOOBYDOO'})
                     .expect(404)
                     .expect(res=>
@@ -121,16 +125,12 @@ describe('Matches Endpoints', function() {
             it('should return an object with the match details',()=>{
                 return supertest(app)
                     .get('/api/matches/1')
+                    .set('Authorization', helpers.makeAuthHeader(testUsers[0]))
                     .expect(200)
                     .expect(res=>{
                         expect(res.body.id).to.eql(1)
                     })
             })
-        })
-        it('with empty tables it returns a 404',()=>{
-            return supertest(app)
-                .get('/api/matches/1')
-                .expect(404)
         })
     })
     describe('POST /api/matches/',()=>{
@@ -165,6 +165,7 @@ describe('Matches Endpoints', function() {
             it('creates a new match with the two supplied listings',()=>{
                 return supertest(app)
                     .post('/api/matches')
+                    .set('Authorization', helpers.makeAuthHeader(testUsers[0]))
                     .send({
                         user1_id:2,
                         user2_id:3
@@ -177,6 +178,7 @@ describe('Matches Endpoints', function() {
             it('gives an error if duplicate match is found',()=>{
                 return supertest(app)
                     .post('/api/matches')
+                    .set('Authorization', helpers.makeAuthHeader(testUsers[0]))
                     .send({
                         user1_id:1,
                         user2_id:2
@@ -218,11 +220,13 @@ describe('Matches Endpoints', function() {
         it('should delete the requested user and return a 204',()=>{
             return supertest(app)
                 .delete('/api/matches/1')
+                .set('Authorization', helpers.makeAuthHeader(testUsers[0]))
                 .expect(204)
         })
         it('should return an error if no user found',()=>{
             return supertest(app)
                 .delete('/api/matches/1222')
+                .set('Authorization', helpers.makeAuthHeader(testUsers[0]))
                 .expect(404)
         })
     })
