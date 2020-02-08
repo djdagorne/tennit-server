@@ -1,3 +1,6 @@
+const bcrypt = require('bcryptjs')
+const jwt = require('jsonwebtoken')
+
 function makeUserArray() {
     return [
         {
@@ -121,20 +124,24 @@ function makeImageArray(listing){
 function makeMatchArray(listings){
     return [
         {
-            user1_id: listings[0].user_id, //FK john
-            user2_id: listings[1].user_id, //FK susan
+            user1_id: listings[0].user_id, 
+            user2_id: listings[1].user_id,
         },
         {
-            user1_id: listings[0].user_id, //FK john
-            user2_id: listings[2].user_id, //FK gert
+            user1_id: listings[0].user_id,
+            user2_id: listings[2].user_id, 
         },
         {
-            user1_id: listings[0].user_id, //FK john
-            user2_id: listings[3].user_id, //FK marg
+            user1_id: listings[0].user_id, 
+            user2_id: listings[3].user_id, 
         },
         {
-            user1_id: listings[1].user_id, //FK susan 1
-            user2_id: listings[3].user_id, //FK marg
+            user1_id: listings[1].user_id, 
+            user2_id: listings[3].user_id, 
+        },
+        {
+            user1_id: listings[2].user_id, 
+            user2_id: listings[3].user_id, 
         },
     ]
 }
@@ -212,6 +219,29 @@ function makeMaliciousListing(users) {
     }
 }
 
+function seedUsers(db, users){ 
+    const preppedUsers = users.map((user, index) => ({
+        //id: index + 1,
+        ...user,
+        password: bcrypt.hashSync(user.password, 1) //hash
+    }))
+    return db.into('tennit_users').insert(preppedUsers)
+        .then(() =>
+        //update the auto sequence to stay in sync
+            db.raw(
+            `SELECT setval('tennit_users_id_seq', ?)`,
+            [users.length], 
+            )
+        )
+}
+
+function makeAuthHeader(user, secret = process.env.JWT_SECRET){
+    const token = jwt.sign({ id: user.id}, secret, {
+        subject: user.email,
+        algorithm: 'HS256'
+    })
+    return `Bearer ${token}`
+}
 function makeThingsFixtures(){
     const testUsers = makeUserArray()
     const testListings = makeListingArray(testUsers)
@@ -223,6 +253,7 @@ function makeThingsFixtures(){
 }
 
 
+
 module.exports = {
     makeUserArray,
     makeListingArray,
@@ -232,4 +263,6 @@ module.exports = {
     makeMaliciousListing,
 
     makeThingsFixtures,
+    seedUsers,
+    makeAuthHeader
 }

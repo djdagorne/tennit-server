@@ -10,6 +10,7 @@ const listingsRouter = require('./listings/listings-router')
 const matchesRouter = require('./matches/matches-router')
 const commentsRouter = require('./comments/comments-router')
 const imagesRouter = require('./images/images-router')
+const authRouter = require('./auth/auth-router')
 
 const app = express();
 
@@ -24,19 +25,7 @@ app.use('/api/listings', listingsRouter)
 app.use('/api/matches', matchesRouter) 
 app.use('/api/comments', commentsRouter)
 app.use('/api/images', imagesRouter)
-//app.use('/api/auth', Router) auth
-
-
-// app.use(function validateBearerToken(req, res, next) {
-//     const apiToken = process.env.API_TOKEN
-//     const authToken = req.get('Authorization')
-  
-//     if (!authToken || authToken.split(' ')[1] !== apiToken) {
-//       return res.status(401).json({ error: 'Unauthorized request' })
-//     }
-//     // move to the next middleware
-//     next()
-//   })
+app.use('/api/auth', authRouter)
 
 // const logger = winston.createLogger({
 //     level:'info',
@@ -58,5 +47,18 @@ app.use('/api/images', imagesRouter)
 //     }
 //     res.status(500).json(response);
 // })
+
+// app.use(function validateBearerToken(req, res, next) {
+//     const apiToken = process.env.API_TOKEN
+//     const authToken = req.get('Authorization')
+  
+//     if (!authToken || authToken.split(' ')[1] !== apiToken) {
+//       return res.status(401).json({ error: 'Unauthorized request' })
+//     }
+//     // move to the next middleware
+//     next()
+//   })
+
+
 
 module.exports = app;

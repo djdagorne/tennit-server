@@ -96,7 +96,7 @@ describe('Images Endpoints',()=>{
                             })
                     })
             })
-            it.only('inserts image into db',()=> {
+            it('inserts image into db',()=> {
                 const newImage = {
                     image: 'https://loremflickr.com/500/500/landscape?random=1',
                     user_id: 1,

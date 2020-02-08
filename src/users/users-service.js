@@ -27,7 +27,7 @@ const UsersService = {
             .delete()
     },
     hashPassword(password){
-        return bcrypt.hash(password, 12)
+        return bcrypt.hash(password, 1) //hash
     },
     updateUser(knex, id, newUserFields){
         return knex('tennit_listings')

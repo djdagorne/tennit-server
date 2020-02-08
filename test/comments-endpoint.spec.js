@@ -56,6 +56,14 @@ describe('Comments Endpoints',()=> {
                             })
                     })
             })
+            it('returns an empty array with a 200 when no comments exist, but match exists',()=>{
+                return supertest(app)
+                    .get('/api/comments/5')
+                    .expect(200)
+                    .expect(res=>{
+                        expect(res.body).to.eql([])
+                    })
+            })
             it('it returns all comments associated with the correct match_id',()=>{
                 return supertest(app)
                     .get('/api/comments/1')

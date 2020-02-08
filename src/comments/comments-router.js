@@ -49,14 +49,21 @@ commentsRouter
 commentsRouter
     .route('/:match_id')
     .all((req,res,next)=>{
-        CommentsService.getCommentsByMatchId(
+        CommentsService.inspectMatch(
             req.app.get('db'),
             req.params.match_id
         )
-            .then(comments=>{
-                if(comments.length){
-                    res.comments = comments.map(comment=>CommentsService.sanitizeComment(comment))
-                    next()
+            .then(match=>{
+                if(match){
+                    CommentsService.getCommentsByMatchId(
+                        req.app.get('db'),
+                        req.params.match_id
+                    )
+                        .then(comments=>{
+                            res.comments = comments.map(comment=>CommentsService.sanitizeComment(comment))
+                            next()
+                        })
+                        .catch(next)
                 }else{
                     res.status(404).json({
                         error: {message: 'Match_id not found.'}
@@ -64,6 +71,7 @@ commentsRouter
                 }
             })
             .catch(next)
+        
     })
     .get((req,res,next)=>{
         res.json(res.comments)

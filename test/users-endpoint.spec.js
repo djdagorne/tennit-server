@@ -244,13 +244,14 @@ describe('Users Endpoints', function() {
             it('responds 204 and removes associated matches as well',()=>{
                 return supertest(app)
                     .delete('/api/users/1')
+                    .expect(204)
                     .then(()=>
                         supertest(app)
                             .get('/api/matches/?user_id=1')
                             .expect(404)
                             .expect(res=>{
                                 expect(res.body).to.eql({
-                                    error: {message: `No match found.`}
+                                    error: {message: `No valid query entered.`}
                                 })
                             })
                     )

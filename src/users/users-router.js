@@ -32,11 +32,9 @@ usersRouter
             })
             .catch(next)
         }
-        
     })
     .post(jsonParser, (req,res,next)=>{
         const {email, password} = req.body;
-        //console.log('$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$', req.body)
         for (const field of ['email', 'password']){
             if(!req.body[field]){
                 return res.status(400).json({
@@ -66,7 +64,6 @@ usersRouter
                 //             email,
                 //             password: hashedPassword
                 //         }
-                
                         return UsersService.insertNewUser(
                             req.app.get('db'),
                             //newUser

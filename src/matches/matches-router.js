@@ -1,6 +1,7 @@
 const express = require('express')
 const helpers = require('../../test/test-helpers')
 const MatchesService = require('./matches-service')
+const UsersService = require('../users/users-service')
 const matchesRouter = express.Router()
 const jsonParser = express.json()
 
@@ -9,20 +10,35 @@ matchesRouter
     .get((req,res,next)=>{
         const {user_id} = req.query
         if(Number(user_id)){
-            MatchesService.searchMatchesByUserId(
-                req.app.get('db'), 
+            UsersService.getUserById(
+                req.app.get('db'),
                 user_id
             )
-                .then(matches=>{
-                    if(matches.length > 0){
-                        res.json(matches)
+                .then(user=>{
+                    if(user){
+                        MatchesService.searchMatchesByUserId(
+                            req.app.get('db'), 
+                            user_id
+                        )
+                            .then(matches=>{
+                                if(matches.length > 0){
+                                    res.json(matches)
+                                }
+                                if(matches === []){
+                                    res.status(404).json({
+                                        error: {message: `No matches found.`}
+                                    })
+                                }
+                            })
+                            .catch(next)
                     }else{
-                        res.status(204).json({
-                            error: {message: `No match found.`}
-                        })
+                        res.status(404).json({
+                            error: {message: `No valid query entered.`}
+                        }) 
                     }
                 })
                 .catch(next)
+            
         }
         else{
             res.status(404).json({

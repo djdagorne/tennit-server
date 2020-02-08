@@ -62,7 +62,7 @@ describe('Matches Endpoints', function() {
                     .expect(404)
                     .expect(res => 
                         expect(res.body).to.eql({
-                            error: {message: `No match found.`}
+                            error: {message: `No valid query entered.`}
                         })
                     )
             })
@@ -166,12 +166,12 @@ describe('Matches Endpoints', function() {
                 return supertest(app)
                     .post('/api/matches')
                     .send({
-                        user1_id:3,
-                        user2_id:4
+                        user1_id:2,
+                        user2_id:3
                     })
                     .expect(201)
                     .expect(res=>{
-                        expect(res.body.id).to.eql(5)
+                        expect(res.body.id).to.eql(testMatches.length+1)
                     })
             })
             it('gives an error if duplicate match is found',()=>{
