@@ -253,13 +253,13 @@ describe('Listings Endpoints', function() {
                 }
                 return supertest(app)
                     .patch(`/api/listings/3`)
-                    .set('Authorization', helpers.makeAuthHeader(testUsers[0]))
+                    .set('Authorization', helpers.makeAuthHeader(testUsers[2]))
                     .send(newFields)
-                    .expect(204)
+                    .expect(200)
                     .then(()=>{
                         return supertest(app)
                             .get(`/api/listings/3`)
-                            .set('Authorization', helpers.makeAuthHeader(testUsers[0]))
+                            .set('Authorization', helpers.makeAuthHeader(testUsers[2]))
                             .expect(res=>{
                                 expect(res.body.rent).to.eql(700)
                                 expect(res.body.neighborhood).to.eql('Updated')
@@ -280,7 +280,7 @@ describe('Listings Endpoints', function() {
                     .patch(`/api/listings/1`)
                     .set('Authorization', helpers.makeAuthHeader(testUsers[0]))
                     .send({ding: 'dong', rent: 777})
-                    .expect(204)
+                    .expect(200)
                     .then(()=>
                         supertest(app)
                             .get('/api/listings/1')

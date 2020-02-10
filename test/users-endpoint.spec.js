@@ -43,14 +43,13 @@ describe('Users Endpoints', function() {
         })
     })
     describe('POST /api/users/',()=>{
-        it('it creates a new user, responds with 201 and the user object',()=>{
+        it('it creates a new user, responds with 201 and the user jwt',()=>{
             return supertest(app)
                 .post('/api/users')
                 .send(testUsers[1])
                 .expect(201)
                 .expect(res=>{
-                    expect(res.body.email).to.eql(testUsers[1].email)
-                    expect(res.body).to.have.property('id')
+                    expect(res.body).to.have.property('authToken')
                 })
         })
         context('given duplicate user emails',()=>{
@@ -142,7 +141,7 @@ describe('Users Endpoints', function() {
             })
         })
     })
-    describe.only('DELETE /api/users/:user_id',()=>{
+    describe('DELETE /api/users/:user_id',()=>{
         context('given there are users in the database',()=>{
             beforeEach('insert the users, listings, images, matches and comments',()=>{
                 return db

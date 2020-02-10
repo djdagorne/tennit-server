@@ -5,6 +5,7 @@ const helpers = require('../../test/test-helpers')
 const usersRouter = express.Router()
 const jsonParser = express.json()
 const {requireAuth} = require('../middleware/jwt-auth')
+const AuthService = require('../auth/auth-service')
 
 usersRouter
     .route('/')
