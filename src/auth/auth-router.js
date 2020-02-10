@@ -21,6 +21,7 @@ authRouter
             loginUser.email
         )
             .then(user =>{
+                console.log(user)
                 if(!user){
                     return res.status(400).json({
                         error: {message: 'Incorrect username or password.'}
