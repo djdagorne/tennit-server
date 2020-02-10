@@ -8,7 +8,7 @@ describe('Listings Endpoints', function() {
     before('make knex instance',()=>{
         db = knex({
             client: 'pg',
-            connection: process.env.REACT_APP_TEST_DB_URL,
+            connection: process.env.REACT_APP_TEST_DATABASE_URL,
         })
         app.set('db', db)
     })
