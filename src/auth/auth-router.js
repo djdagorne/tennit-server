@@ -6,6 +6,7 @@ const { requireAuth } = require('../middleware/jwt-auth')
 
 authRouter
     .post('/login', jsonParser, (req,res,next)=>{
+        console.log(req.body)
         const {email, password} = req.body
         const loginUser = {email, password}
         for (const [key, value] of Object.entries(loginUser)){
