@@ -6,7 +6,6 @@ const { requireAuth } = require('../middleware/jwt-auth')
 
 authRouter
     .post('/login', jsonParser, (req,res,next)=>{
-        console.log(req.body)
         const {email, password} = req.body
         const loginUser = {email, password}
         for (const [key, value] of Object.entries(loginUser)){
@@ -21,7 +20,6 @@ authRouter
             loginUser.email
         )
             .then(user =>{
-                console.log(user)
                 if(!user){
                     return res.status(400).json({
                         error: {message: 'Incorrect username or password.'}
