@@ -3,8 +3,8 @@ const jwt = require('jsonwebtoken')
 const config = require('../config')
 
 const AuthService = {
-    getUserByEmail(knex, email){
-        return knex.from('tennit_users').select('*').where('email',email).first()
+    getUserByEmail(db, email){
+        return db('tennit_users').where('email',email).first()
     },
     comparePasswords(password, hash){
         return bcrypt.compare(password, hash)
