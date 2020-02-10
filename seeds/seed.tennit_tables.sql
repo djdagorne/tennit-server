@@ -9,7 +9,7 @@ TRUNCATE
 
 INSERT INTO tennit_users (email, password)
 VALUES
-    ('john@email.com','AAaa11!!'),
+    ('john@email.com','$2a$12$kJrJLlPChs01Vrw4bYXlOus5pJITEVYQY5PadR4FCn.RfiXcAbfsy'),
     ('susan@email.com','$2a$12$kJrJLlPChs01Vrw4bYXlOus5pJITEVYQY5PadR4FCn.RfiXcAbfsy'),
     ('gertrude@email.com','$2a$12$kJrJLlPChs01Vrw4bYXlOus5pJITEVYQY5PadR4FCn.RfiXcAbfsy'),
     ('margret@email.com','$2a$12$kJrJLlPChs01Vrw4bYXlOus5pJITEVYQY5PadR4FCn.RfiXcAbfsy'); 

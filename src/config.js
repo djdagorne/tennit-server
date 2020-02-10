@@ -4,5 +4,5 @@ module.exports = {
     REACT_APP_DB_URL: process.env.REACT_APP_DB_URL || 'postgresql://postgres:Ampersand1@localhost/tennit',
     REACT_APP_TEST_DB_URL: process.env.REACT_APP_TEST_DB_URL ||'postgresql://postgres:Ampersand1@localhost/tennit-test',
     JWT_SECRET: process.env.JWT_SECRET || 'secret',
-    JWT_EXPIRY: process.env.JWT_EXPIRY || '3h'
+    JWT_EXPIRY: process.env.JWT_EXPIRY || '10s'
 }

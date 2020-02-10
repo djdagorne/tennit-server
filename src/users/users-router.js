@@ -59,21 +59,24 @@ usersRouter
                         error: { message: `Email already in use.` }
                     })
                 }
-                // return UsersService.hashPassword(password)
-                //     .then(hashedPassword => {
-                //         const newUser = {
-                //             email,
-                //             password: hashedPassword
-                //         }
+                return UsersService.hashPassword(password)
+                    .then(hashedPassword => {
+                        const newUser = {
+                            email,
+                            password: hashedPassword
+                        }
                         return UsersService.insertNewUser(
                             req.app.get('db'),
-                            //newUser
-                            req.body
+                            newUser
                         )
                             .then(user => {
-                                res.status(201).json(user)
+                                const subject = user.email
+                                const payload = {id: user.id}
+                                res.status(201).send({
+                                    authToken: AuthService.createJwt(subject, payload)
+                                })
                              })
-                    // })
+                    })
                 
                     
             })

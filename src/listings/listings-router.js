@@ -100,7 +100,8 @@ listingRouter
                 newListingData
             )
                 .then(rows => {
-                    res.status(204).end()
+                    console.log(rows)
+                    return res.send(rows)
                 })
                 .catch(next)
         }else{

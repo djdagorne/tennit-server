@@ -90,7 +90,7 @@ imagesRouter
                     newImage
                 )
                     .then(image=>{
-                        res.status(200).send(image)
+                        return res.status(200).send(image)
                     })
                     .catch(next)
             }else{
