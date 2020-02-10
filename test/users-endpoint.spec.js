@@ -49,6 +49,7 @@ describe('Users Endpoints', function() {
                 .send(testUsers[1])
                 .expect(201)
                 .expect(res=>{
+                    console.log(res.body)
                     expect(res.body).to.have.property('authToken')
                 })
         })
