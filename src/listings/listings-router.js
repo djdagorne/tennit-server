@@ -100,7 +100,6 @@ listingRouter
                 newListingData
             )
                 .then(rows => {
-                    console.log(rows)
                     return res.send(rows)
                 })
                 .catch(next)
