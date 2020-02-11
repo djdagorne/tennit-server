@@ -23,10 +23,10 @@ matchesRouter
                         )
                             .then(matches=>{
                                 if(matches.length > 0){
-                                    res.json(matches)
+                                    res.status(200).json(matches)
                                 }
-                                if(matches === []){
-                                    res.status(404).json({
+                                if( matches.length === 0 ){
+                                    res.status(200).json({
                                         error: {message: `No matches found.`}
                                     })
                                 }
