@@ -31,7 +31,7 @@ imagesRouter
             .then(image=>{
                 if(image){
                     res.status(400).json({
-                        error:{message: 'User already has image'}
+                        error: {message: 'User already has image'}
                     })
                 }else{
                     if(ImagesService.validateUrl(newImage)){

@@ -189,7 +189,7 @@ describe('Comments Endpoints',()=> {
                     .expect(400)
                     .expect(res=>{
                         expect(res.body).to.eql({
-                            error:{message: 'User is not part of this match.'}
+                            error: {message: 'User is not part of this match.'}
                         })
                     })
             })

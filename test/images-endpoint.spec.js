@@ -172,7 +172,7 @@ describe('Images Endpoints',()=>{
                             .expect(400)
                             .expect(res=>{
                                 expect(res.body).to.eql({
-                                    error:{message: 'User already has image'}
+                                    error: {message: 'User already has image'}
                                 })
                             })
                     )

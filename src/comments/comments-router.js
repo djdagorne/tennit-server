@@ -39,7 +39,7 @@ commentsRouter
                         .catch(next)
                 }else{
                     res.status(400).json({
-                        error:{message: 'User is not part of this match.'}
+                        error: {message: 'User is not part of this match.'}
                     })
                 }
             })

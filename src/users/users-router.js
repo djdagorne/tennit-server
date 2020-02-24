@@ -76,10 +76,8 @@ usersRouter
                                 res.status(201).send({
                                     authToken: AuthService.createJwt(subject, payload)
                                 })
-                             })
+                            })
                     })
-                
-                    
             })
             .catch(next)
     })
