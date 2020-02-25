@@ -15,10 +15,15 @@ listingRouter
                     res.json(
                         ListingsService.getSearchResults(
                             allListings,
+                            /* req.app.get('db'), */
                             province,
                             city,
                             rent
                         )
+                            /* .then(rows=>{ //trying to refine search knex psql commands, optional TODO
+                                console.log(rows)
+                                res.status(200).json(rows)
+                            }) */
                     )
                 }else{
                     res.status(400).json({

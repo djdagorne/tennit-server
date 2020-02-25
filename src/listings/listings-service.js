@@ -52,6 +52,22 @@ const ListingsService = {
             return {error: {message: 'Search returned empty.'}}
         }
     },
+   /*  getSearchResults(knex, province, city, rent){
+        return knex
+            .select('tennit_listings.*','tennit_images.image')
+            .from('tennit_listings')
+            .where('tennit_listings.rent','<', rent )
+            .orWhere('tennit_listings.province','like','%'+province+'%')
+            .orWhere('tennit_listings.city','like','%'+city+'%')
+            .leftJoin(
+                'tennit_images',
+                'tennit_listings.user_id',
+                'tennit_images.user_id')
+            .returning('*')
+            .then(rows=>{
+                return rows
+            })
+    }, */
     updateListing(knex, user_id, newListingFields){
         return knex('tennit_listings')
             .where({user_id})
