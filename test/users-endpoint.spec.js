@@ -17,31 +17,6 @@ describe('Users Endpoints', function() {
     afterEach('clean the tables',()=> db.raw('TRUNCATE tennit_users, tennit_listings, tennit_images, tennit_matches, tennit_comments RESTART IDENTITY CASCADE'))
     after('disconnect from db',()=> db.destroy())
     
-    describe('GET /api/users/:user_id',()=>{
-        context('Given there are users in the database',()=>{
-            beforeEach('insert the users',()=>{
-                return db
-                    .into('tennit_users')
-                    .insert(testUsers)
-            })
-            it('responds with 200 and the user JSON',()=>{
-                return supertest(app)
-                    .get('/api/users/1')
-                    .expect(200)
-                    .expect(res => {
-                        expect(res.body.email).to.eql(testUsers[0].email)
-                        expect(res.body).to.have.property('id')
-                    })
-            })
-        })
-        context('Given there are no users in the database',()=>{
-            it('responds with 404',()=>{
-                return supertest(app)
-                    .get(`/api/users/1234566666`)
-                    .expect(404, { error: { message: `User doesn't exist.`}})
-            })
-        })
-    })
     describe('POST /api/users/',()=>{
         it('it creates a new user, responds with 201 and the user jwt',()=>{
             return supertest(app)

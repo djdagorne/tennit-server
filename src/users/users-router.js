@@ -9,32 +9,6 @@ const AuthService = require('../auth/auth-service')
 
 usersRouter
     .route('/')
-    .get((req,res,next)=>{
-        const {email} = req.query
-        if(email){
-            UsersService.getUserByEmail(
-                req.app.get('db'),
-                email
-            )
-                .then(user=>{
-                    if(user){
-                        res.json(user)
-                    }
-                    else{
-                        res.json({
-                            error: {message: `User doesn't exist.`}
-                        })
-                    }
-                })
-                .catch(next)
-        }else{
-            UsersService.getAllUsers(req.app.get('db'))
-            .then(users=>{
-                res.json(users)
-            })
-            .catch(next)
-        }
-    })
     .post(jsonParser, (req,res,next)=>{
         const {email, password} = req.body;
         for (const field of ['email', 'password']){
