@@ -21,7 +21,6 @@ listingRouter
                             rent
                         )
                             /* .then(rows=>{ //trying to refine search knex psql commands, optional TODO
-                                console.log(rows)
                                 res.status(200).json(rows)
                             }) */
                     )
