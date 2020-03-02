@@ -25,7 +25,7 @@ app.use('/api/listings', listingsRouter)
 app.use('/api/matches', matchesRouter) 
 app.use('/api/comments', commentsRouter)
 app.use('/api/images', imagesRouter)
-app.use('/api/auth', authRouter) //TODO compare thingful-client to tennit-client and get auth working on tennit-client
+app.use('/api/auth', authRouter)
 
 const logger = winston.createLogger({
     level:'info',

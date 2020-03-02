@@ -15,14 +15,10 @@ listingRouter
                     res.json(
                         ListingsService.getSearchResults(
                             allListings,
-                            /* req.app.get('db'), */
                             province,
                             city,
                             rent
                         )
-                            /* .then(rows=>{ //trying to refine search knex psql commands, optional TODO
-                                res.status(200).json(rows)
-                            }) */
                     )
                 }else{
                     res.status(400).json({
@@ -36,6 +32,7 @@ listingRouter
         const baseKeys = ['user_id','firstname','lastname','usergender','prefgender','age','province','city','listing','userblurb']
         const listingKeys = ['rent','blurb']
         const newListing = req.body;
+        console.log(newListing)
         if(Object.keys(newListing).length > 0){
             for(const field of baseKeys){
                 if(newListing[field] == null){

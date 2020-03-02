@@ -5,7 +5,6 @@ const commentsRouter = express.Router()
 const jsonParser = express.json()
 const {requireAuth} = require('../middleware/jwt-auth')
 
-//TODO make .all(check___Exists instead of these really long if statements?)
 commentsRouter
     .route('/')
     .get((req,res,next)=>{

@@ -23,7 +23,6 @@ imagesRouter
                   })
             }
         }
-        //TODO check if user_id exists already before insertion
         ImagesService.getImageByUserId(
             req.app.get('db'),
             user_id
