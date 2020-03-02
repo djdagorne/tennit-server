@@ -23,10 +23,10 @@ VALUES
 
 INSERT INTO tennit_images (image, user_id)
 VALUES
-    ('https://loremflickr.com/500/500/landscape?random=1', 1),
-    ('https://loremflickr.com/500/500/landscape?random=2', 2),
-    ('https://loremflickr.com/500/500/landscape?random=3', 3),
-    ('https://loremflickr.com/500/500/landscape?random=4', 4);
+    ('https://raw.githubusercontent.com/djdagorne/tennit-client/master/src/imgs/apt.jpg', 1),
+    ('https://raw.githubusercontent.com/djdagorne/tennit-client/master/src/imgs/apt2.jpg', 2),
+    ('https://raw.githubusercontent.com/djdagorne/tennit-client/master/src/imgs/apt3.jpg', 3),
+    ('https://raw.githubusercontent.com/djdagorne/tennit-client/master/src/imgs/apt4.jpg', 4);
 
 INSERT INTO tennit_matches (user1_id, user2_id)
 VALUES
