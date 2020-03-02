@@ -113,14 +113,6 @@ function makeImageArray(listing){
     ]
 }
 
-//how will matches be created?
-//a user will 'like' another user_id and it will create a new column to keep track of the relationship between users.
-//when any user is on their homepage it will perform a Match Table search and display any profiles that are falsely matched AND contain the signed in users user_id
-//if either user 'dislikes' the other user, it will filter the match row from their lists
-
-
-//NOTES ANTHONY; dont do two way 'like system', make it more like a marketplace app
-
 function makeMatchArray(listings){
     return [
         {

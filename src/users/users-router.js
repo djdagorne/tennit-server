@@ -10,7 +10,7 @@ const AuthService = require('../auth/auth-service')
 usersRouter
     .route('/')
     .post(jsonParser, (req,res,next)=>{
-        const {email, password} = req.body;
+        const {email, password} = req.body
         for (const field of ['email', 'password']){
             if(!req.body[field]){
                 return res.status(400).json({
@@ -69,7 +69,7 @@ usersRouter
                             error: { message: `User doesn't exist.`}
                         })
                 }
-                res.user = user; //creating user object in the response
+                res.user = user //creating user object in the response
                 next()
             })
             .catch(next)
@@ -88,7 +88,7 @@ usersRouter
             .catch(next)
     })
     .patch(jsonParser, (req,res,next)=>{
-        const newUserData = req.body;
+        const newUserData = req.body
         const testUsers = helpers.makeUserArray()
         const userKeys = Object.keys(testUsers[0])
         for(const [key] of Object.entries(newUserData)){
@@ -113,4 +113,4 @@ usersRouter
         }
     })
 
-module.exports = usersRouter;
+module.exports = usersRouter

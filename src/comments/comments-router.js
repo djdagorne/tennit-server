@@ -13,8 +13,8 @@ commentsRouter
         })
     })
     .post(requireAuth, jsonParser,(req,res,next)=>{
-        const {match_id, user_id, comment} = req.body;
-        const newComment = {match_id, user_id, comment};
+        const {match_id, user_id, comment} = req.body
+        const newComment = {match_id, user_id, comment}
         for(const[key,value] of Object.entries(newComment)){
             if(value == null){
                 return res.status(400).json({
@@ -76,4 +76,4 @@ commentsRouter
         res.json(res.comments)
     })
 
-module.exports = commentsRouter;
+module.exports = commentsRouter

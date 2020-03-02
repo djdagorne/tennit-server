@@ -14,8 +14,8 @@ imagesRouter
         })
     })
     .post(requireAuth, jsonParser,(req,res,next)=>{
-        const {image, user_id} = req.body;
-        const newImage = {image, user_id};
+        const {image, user_id} = req.body
+        const newImage = {image, user_id}
         for(const [key, value] of Object.entries(newImage)){
             if(value == null){
                 return res.status(400).json({
@@ -73,7 +73,7 @@ imagesRouter
         res.json(res.image)
     })
     .patch(jsonParser, (req,res,next)=>{
-        const {user_id, image} = req.body;
+        const {user_id, image} = req.body
         const newImage = {user_id, image}
         const requiredFields = ['user_id', 'image']
         requiredFields.forEach(field=>{
@@ -104,4 +104,4 @@ imagesRouter
         }
     })
 
-module.exports = imagesRouter;
+module.exports = imagesRouter

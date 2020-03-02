@@ -128,7 +128,7 @@ describe('Listings Endpoints', function() {
                     .select('*')
                     .from('tennit_users')
                     .then(users=>{
-                        const testListings = helpers.makeListingArray(users);
+                        const testListings = helpers.makeListingArray(users)
                         const testListing = testListings[0] //working fine
                         return supertest(app)
                             .post('/api/listings/')

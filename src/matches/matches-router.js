@@ -48,7 +48,7 @@ matchesRouter
         }
     })
     .post(requireAuth, jsonParser, (req,res,next)=>{
-        const {user1_id, user2_id} = req.body;
+        const {user1_id, user2_id} = req.body
         if(Number(user1_id) && Number(user2_id)){
             return MatchesService.checkExistingMatch(
                 req.app.get('db'),
@@ -92,7 +92,7 @@ matchesRouter
                         error: {message: `No match found.`}
                     })
                 }
-                res.match = match;
+                res.match = match
                 next()
             })
             .catch(next)
@@ -112,4 +112,4 @@ matchesRouter
     })
 
 
-module.exports = matchesRouter;
+module.exports = matchesRouter

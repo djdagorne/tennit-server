@@ -37,4 +37,4 @@ const ImagesService = {
     }
 }
 
-module.exports = ImagesService;
+module.exports = ImagesService

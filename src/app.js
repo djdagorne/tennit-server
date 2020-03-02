@@ -12,13 +12,13 @@ const commentsRouter = require('./comments/comments-router')
 const imagesRouter = require('./images/images-router')
 const authRouter = require('./auth/auth-router')
 
-const app = express();
+const app = express()
 
-const morganOption = (NODE_ENV === 'production') ? 'tiny' : 'common';
+const morganOption = (NODE_ENV === 'production') ? 'tiny' : 'common'
 
-app.use(morgan(morganOption));
-app.use(helmet());
-app.use(cors());
+app.use(morgan(morganOption))
+app.use(helmet())
+app.use(cors())
 
 app.use('/api/users', usersRouter)
 app.use('/api/listings', listingsRouter)
@@ -33,7 +33,7 @@ const logger = winston.createLogger({
     transports: [
         new winston.transports.File({ filename: 'info.log' })
     ]
-});
+})
 
 app.use(function errorHandler(error, req, res, next) {
     let response
@@ -41,14 +41,14 @@ app.use(function errorHandler(error, req, res, next) {
         logger.add(new winston.transports.Console({
             format: winston.format.simple()
         }))
-        response = { error: {message: 'server error'} }; 
+        response = { error: {message: 'server error'} }
     } else {
-        console.error(error);
+        console.error(error)
         response = { message: error.message, error }
     }
-    res.status(500).json(response);
+    res.status(500).json(response)
 })
 
 
 
-module.exports = app;
+module.exports = app

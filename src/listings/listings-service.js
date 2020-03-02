@@ -81,4 +81,4 @@ const ListingsService = {
     }
 }
 
-module.exports = ListingsService;
+module.exports = ListingsService

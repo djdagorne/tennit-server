@@ -81,4 +81,4 @@ const MatchesService = {
     }
 }
 
-module.exports = MatchesService;
+module.exports = MatchesService
