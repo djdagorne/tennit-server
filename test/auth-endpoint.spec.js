@@ -104,7 +104,7 @@ describe('Auth Endpoints', function() {
                 .set('Authorization', helpers.makeAuthHeader({
                     id: 1,
                     email: testUsers[0].email,
-                    password: bcrypt.hash(testUsers[0].password, 1) //hash
+                    password: bcrypt.hash(testUsers[0].password, 1)
                 }))
                 .expect(200, {
                     authToken: expectedToken

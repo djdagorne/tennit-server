@@ -213,13 +213,11 @@ function makeMaliciousListing(users) {
 
 function seedUsers(db, users){ 
     const preppedUsers = users.map((user, index) => ({
-        //id: index + 1,
         ...user,
-        password: bcrypt.hashSync(user.password, 1) //hash
+        password: bcrypt.hashSync(user.password, 1) 
     }))
     return db.into('tennit_users').insert(preppedUsers)
         .then(() =>
-        //update the auto sequence to stay in sync
             db.raw(
             `SELECT setval('tennit_users_id_seq', ?)`,
             [users.length], 
