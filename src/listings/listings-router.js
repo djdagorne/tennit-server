@@ -32,7 +32,6 @@ listingRouter
         const baseKeys = ['user_id','firstname','lastname','usergender','prefgender','age','province','city','listing','userblurb']
         const listingKeys = ['rent','blurb']
         const newListing = req.body
-        console.log(newListing)
         if(Object.keys(newListing).length > 0){
             for(const field of baseKeys){
                 if(newListing[field] == null){
