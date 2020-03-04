@@ -3,7 +3,7 @@ const knex = require('knex')
 const helpers = require('./test-helpers')
 const { testUsers, testListings } = helpers.makeThingsFixtures()
 
-describe('Listings Endpoints', function() {
+describe('Listings Endpoints', function(){
     let db 
     before('make knex instance',()=>{
         db = knex({

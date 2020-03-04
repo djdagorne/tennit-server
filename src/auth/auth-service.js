@@ -9,7 +9,7 @@ const AuthService = {
     comparePasswords(password, hash){
         return bcrypt.compare(password, hash)
     },
-    parseBasicToken(token) {
+    parseBasicToken(token){
         return Buffer
             .from(token, 'base64')
             .toString()

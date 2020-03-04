@@ -1,7 +1,7 @@
 const bcrypt = require('bcryptjs')
 const jwt = require('jsonwebtoken')
 
-function makeUserArray() {
+function makeUserArray(){
     return [
         {
             email: 'john@email.com',
@@ -182,7 +182,7 @@ function makeCommentArray(matches){
         },
     ]
 }
-function makeMaliciousListing(users) {
+function makeMaliciousListing(users){
     const maliciousListing = 
         {
             user_id: users[0].id,

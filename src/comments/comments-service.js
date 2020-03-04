@@ -3,15 +3,14 @@ const xss = require('xss')
 const CommentsService = {
     getCommentsByMatchId(knex, match_id){
         return knex
-            .raw(`
-                SELECT
+            .raw(`SELECT
                     c.*,
                     l.firstname
                 FROM tennit_comments c
                 LEFT JOIN tennit_listings l on l.user_id = c.user_id
                 WHERE c.match_id = ${match_id}
-                ORDER BY c.id
-            `)
+                ORDER BY c.id`
+            )
             .then(res=>{
                 return res.rows
             })

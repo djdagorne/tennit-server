@@ -4,7 +4,7 @@ const helpers = require('./test-helpers')
 const { testUsers, testListings } = helpers.makeThingsFixtures()
 const {maliciousListing, expectedListing} = helpers.makeMaliciousListing(testUsers)
 
-describe('Users Endpoints', function() {
+describe('Users Endpoints', function(){
     let db 
     before('make knex instance',()=>{
         db = knex({
@@ -171,13 +171,9 @@ describe('Users Endpoints', function() {
                     .expect(204)
                     .then(()=>
                         supertest(app)
-                            .get(`/api/users/`)
+                            .get(`/api/users/1`)
                             .set('Authorization', helpers.makeAuthHeader(testUsers[0]))
-                            .expect(200)
-                            .expect(res=>{
-                                expect(res.body[0].id).to.eql(2)
-                                expect(res.body.length).to.eql(expectedUsers.length)
-                            })
+                            .expect(404)
                     )
             })
             it('responds 204 removes the associated listings as well',()=>{

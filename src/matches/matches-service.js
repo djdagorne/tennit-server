@@ -4,8 +4,7 @@ const MatchesService = {
     },
     getMatchById(knex, id){
         return knex
-            .raw(`
-            SELECT 
+            .raw(`SELECT 
                 m.id, 
                 m.user1_id, 
                 m.user2_id, 
@@ -28,16 +27,15 @@ const MatchesService = {
             LEFT JOIN tennit_images i ON m.user1_id = i.user_id
             LEFT JOIN tennit_images i2 ON m.user2_id = i2.user_id
 
-            WHERE m.id = ${id}
-        `)
+            WHERE m.id = ${id}`
+        )
         .then(res=>{
             return res.rows[0]
         })
     },
     searchMatchesByUserId(knex, user_id){
         return knex
-            .raw(`
-                SELECT 
+            .raw(`SELECT 
                     m.id, 
                     m.user1_id, 
                     m.user2_id, 
@@ -50,8 +48,8 @@ const MatchesService = {
                 LEFT JOIN tennit_listings l2 ON m.user2_id = l2.user_Id
                 WHERE m.user1_id = ${user_id}
                 OR 
-                m.user2_id = ${user_id};
-            `)
+                m.user2_id = ${user_id};`
+            )
             .then(res=>{
                 return res.rows
             })
