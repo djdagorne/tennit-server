@@ -1,4 +1,4 @@
-const xss = require('xss')
+const xss = require('xss');
 
 const CommentsService = {
     getCommentsByMatchId(knex, match_id){
@@ -12,17 +12,17 @@ const CommentsService = {
                 ORDER BY c.id`
             )
             .then(res=>{
-                return res.rows
-            })
+                return res.rows;
+            });
     },
     inspectMatch(knex, match_id){
-        return knex.from('tennit_matches').select('*').where('id',match_id).first()
+        return knex.from('tennit_matches').select('*').where('id',match_id).first();
     },
     sanitizeComment(newComment){
         return {
             ...newComment,
             comment: xss(newComment.comment)
-        }
+        };
     },
     insertNewComment(knex, newComment){
         return knex
@@ -30,11 +30,11 @@ const CommentsService = {
             .into('tennit_comments')
             .then(()=>{
                 return knex
-                .from('tennit_comments')
-                .select('*')
-                .where('match_id',newComment.match_id)
-            })
+                    .from('tennit_comments')
+                    .select('*')
+                    .where('match_id',newComment.match_id);
+            });
     }
 }
 
-module.exports = CommentsService
+module.exports = CommentsService;

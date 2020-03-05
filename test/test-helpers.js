@@ -1,5 +1,5 @@
-const bcrypt = require('bcryptjs')
-const jwt = require('jsonwebtoken')
+const bcrypt = require('bcryptjs');
+const jwt = require('jsonwebtoken');
 
 function makeUserArray(){
     return [
@@ -19,7 +19,7 @@ function makeUserArray(){
             email: 'margret@email.com',
             password: 'AAaa11!!',
         },
-    ]
+    ];
 }
 
 function makeListingArray(user){
@@ -84,8 +84,7 @@ function makeListingArray(user){
             userblurb: 'i am user!',
             blurb: 'this is setting description!',
         }
-
-    ]
+    ];
 }
 
 function makeImageArray(listing){ 
@@ -110,7 +109,7 @@ function makeImageArray(listing){
             user_id: listing[3].user_id,
             date_modified: new Date(),
         },
-    ]
+    ];
 }
 
 function makeMatchArray(listings){
@@ -135,7 +134,7 @@ function makeMatchArray(listings){
             user1_id: listings[2].user_id, 
             user2_id: listings[3].user_id, 
         },
-    ]
+    ];
 }
 
 function makeCommentArray(matches){
@@ -180,11 +179,10 @@ function makeCommentArray(matches){
             user_id: matches[2].user1_id,
             comment: 'blah blah blah'
         },
-    ]
+    ];
 }
 function makeMaliciousListing(users){
-    const maliciousListing = 
-        {
+    const maliciousListing = {
             user_id: users[0].id,
             firstname: 'Naughty naughty very naughty <script>alert("xss");</script>',
             lastname: `Bad image <img src="https://url.to.file.which/does-not.exist" onerror="alert(document.cookie);">. But not <strong>all</strong> bad.`,
@@ -198,48 +196,45 @@ function makeMaliciousListing(users){
             listing: true,
             userblurb: 'i am user!',
             blurb: 'this is setting description!',
-        }
-    const expectedListing = 
-        {
+    };
+    const expectedListing = {
             ...maliciousListing,
             firstname: 'Naughty naughty very naughty &lt;script&gt;alert(\"xss\");&lt;/script&gt;',
             lastname: `Bad image <img src="https://url.to.file.which/does-not.exist">. But not <strong>all</strong> bad.`
-        } 
+    };
     return {
         maliciousListing,
         expectedListing
-    }
+    };
 }
 
 function seedUsers(db, users){ 
     const preppedUsers = users.map((user, index) => ({
         ...user,
         password: bcrypt.hashSync(user.password, 1) 
-    }))
+    }));
     return db.into('tennit_users').insert(preppedUsers)
         .then(() =>
-            db.raw(
-            `SELECT setval('tennit_users_id_seq', ?)`,
-            [users.length], 
-            )
-        )
+            db.raw(`SELECT setval('tennit_users_id_seq', ?)`,
+            [users.length], )
+        );
 }
 
 function makeAuthHeader(user, secret = process.env.JWT_SECRET){
     const token = jwt.sign({ id: user.id}, secret, {
         subject: user.email,
         algorithm: 'HS256'
-    })
-    return `Bearer ${token}`
+    });
+    return `Bearer ${token}`;
 }
 function makeThingsFixtures(){
-    const testUsers = makeUserArray()
-    const testListings = makeListingArray(testUsers)
-    const testImages = makeImageArray(testListings)
-    const testMatches = makeMatchArray(testListings)
-    const testComments = makeCommentArray(testMatches)
+    const testUsers = makeUserArray();
+    const testListings = makeListingArray(testUsers);
+    const testImages = makeImageArray(testListings);
+    const testMatches = makeMatchArray(testListings);
+    const testComments = makeCommentArray(testMatches);
 
-    return { testUsers, testListings, testImages, testMatches, testComments}
+    return { testUsers, testListings, testImages, testMatches, testComments};
 }
 
 
@@ -255,4 +250,4 @@ module.exports = {
     makeThingsFixtures,
     seedUsers,
     makeAuthHeader
-}
+};

@@ -1,18 +1,18 @@
-const express = require('express')
-const authRouter = express.Router()
-const jsonParser = express.json()
-const AuthService = require('./auth-service')
-const { requireAuth } = require('../middleware/jwt-auth')
+const express = require('express');
+const authRouter = express.Router();
+const jsonParser = express.json();
+const AuthService = require('./auth-service');
+const { requireAuth } = require('../middleware/jwt-auth');
 
 authRouter
     .post('/login', jsonParser, (req,res,next)=>{
-        const {email, password} = req.body
-        const loginUser = {email, password}
+        const {email, password} = req.body;
+        const loginUser = {email, password};
         for (const [key, value] of Object.entries(loginUser)){
             if(value == null){
                 return res.status(400).json({
                     error: {message: `Missing '${key}' in the request body`}
-                })
+                });
             }
         }
         AuthService.getUserByEmail(
@@ -23,7 +23,7 @@ authRouter
                 if(!user){
                     return res.status(400).json({
                         error: {message: 'Incorrect username or password.'}
-                    })
+                    });
                 }
 
                 return AuthService.comparePasswords(loginUser.password, user.password)
@@ -31,13 +31,13 @@ authRouter
                         if(!comparison){
                             return res.status(400).json({
                                 error: {message: 'Incorrect username or password.'}
-                            })
+                            });
                         }
-                        const subject = user.email
-                        const payload = {id: user.id}
+                        const subject = user.email;
+                        const payload = {id: user.id};
                         res.send({
                             authToken: AuthService.createJwt(subject, payload)
-                        })
+                        });
                     })
             })
             .catch(next)
@@ -45,12 +45,12 @@ authRouter
 
 authRouter
     .post('/refresh', requireAuth, (req,res)=>{
-        const sub = req.user.email
-        const payload = {id: req.user.id}
+        const sub = req.user.email;
+        const payload = {id: req.user.id};
         res.send({
             authToken: AuthService.createJwt(sub, payload)
-        })
+        });
     })
 
 
-module.exports = authRouter
+module.exports = authRouter;

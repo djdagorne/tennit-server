@@ -1,6 +1,6 @@
 const MatchesService = {
     getAllListings(knex){
-        return knex('tennit_matches').select('*')
+        return knex('tennit_matches').select('*');
     },
     getMatchById(knex, id){
         return knex
@@ -30,8 +30,8 @@ const MatchesService = {
             WHERE m.id = ${id}`
         )
         .then(res=>{
-            return res.rows[0]
-        })
+            return res.rows[0];
+        });
     },
     searchMatchesByUserId(knex, user_id){
         return knex
@@ -51,13 +51,13 @@ const MatchesService = {
                 m.user2_id = ${user_id};`
             )
             .then(res=>{
-                return res.rows
-            })
+                return res.rows;
+            });
     },
     deleteMatchById(knex, id){
         return knex('tennit_matches')
             .where({id})
-            .delete()
+            .delete();
     },
     checkExistingMatch(knex, user1_id, user2_id){
         return knex
@@ -66,7 +66,7 @@ const MatchesService = {
             .whereIn('user1_id', [user1_id, user2_id])
             .and
             .whereIn('user2_id',[user1_id, user2_id])
-            .first()
+            .first();
     },
     makeNewMatch(knex, newMatch){
         return knex
@@ -74,9 +74,9 @@ const MatchesService = {
             .insert(newMatch)
             .returning('*')
             .then(rows=>{
-                return rows[0]
-            })
+                return rows[0];
+            });
     }
 }
 
-module.exports = MatchesService
+module.exports = MatchesService;

@@ -1,15 +1,15 @@
-const express = require('express')
-const helpers = require('../../test/test-helpers')
-const MatchesService = require('./matches-service')
-const UsersService = require('../users/users-service')
-const matchesRouter = express.Router()
-const jsonParser = express.json()
-const {requireAuth} = require('../middleware/jwt-auth')
+const express = require('express');
+const helpers = require('../../test/test-helpers');
+const MatchesService = require('./matches-service');
+const UsersService = require('../users/users-service');
+const matchesRouter = express.Router();
+const jsonParser = express.json();
+const {requireAuth} = require('../middleware/jwt-auth');
 
 matchesRouter 
     .route('/')
     .get(requireAuth, (req,res,next)=>{
-        const {user_id} = req.query
+        const {user_id} = req.query;
         if(Number(user_id)){
             UsersService.getUserById(
                 req.app.get('db'),
@@ -23,19 +23,19 @@ matchesRouter
                         )
                             .then(matches=>{
                                 if(matches.length > 0){
-                                    res.status(200).json(matches)
+                                    res.status(200).json(matches);
                                 }
                                 if( matches.length === 0 ){
                                     res.status(200).json({
                                         error: {message: `No matches found.`}
-                                    })
+                                    });
                                 }
                             })
                             .catch(next)
                     }else{
                         res.status(404).json({
                             error: {message: `No valid query entered.`}
-                        }) 
+                        });
                     }
                 })
                 .catch(next)
@@ -44,11 +44,11 @@ matchesRouter
         else{
             res.status(404).json({
                 error: {message: `No valid query entered.`}
-            })
+            });
         }
     })
     .post(requireAuth, jsonParser, (req,res,next)=>{
-        const {user1_id, user2_id} = req.body
+        const {user1_id, user2_id} = req.body;
         if(Number(user1_id) && Number(user2_id)){
             return MatchesService.checkExistingMatch(
                 req.app.get('db'),
@@ -59,24 +59,24 @@ matchesRouter
                     if(!!match){
                         res.status(400).json({
                             error: {message: `Users already matched.`}
-                        })
+                        });
                     }else{
                         const userObject = {
                             user1_id,
                             user2_id
-                        }
+                        };
                         MatchesService.makeNewMatch(
                             req.app.get('db'),
                             userObject
                         )
                             .then(rows=>{
-                                res.status(201).json(rows)
+                                res.status(201).json(rows);
                             })
                     }
                 })
                 .catch(next)
         }
-        next()
+        next();
     })
 
 matchesRouter
@@ -90,12 +90,12 @@ matchesRouter
                 if(!match){
                     return res.status(404).json({
                         error: {message: `No match found.`}
-                    })
+                    });
                 }
-                res.match = match
-                next()
+                res.match = match;
+                next();
             })
-            .catch(next)
+            .catch(next);
     })
     .get((req,res,next)=>{
         res.json(res.match)
@@ -106,10 +106,10 @@ matchesRouter
             req.params.match_id
         )
             .then(()=>{
-                res.status(204).end()
+                res.status(204).end();
             })
-            .catch(next)
+            .catch(next);
     })
 
 
-module.exports = matchesRouter
+module.exports = matchesRouter;

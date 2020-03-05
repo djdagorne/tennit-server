@@ -1,4 +1,4 @@
-const xss = require('xss')
+const xss = require('xss');
 
 const ListingsService = {
     getAllListings(knex){
@@ -8,7 +8,7 @@ const ListingsService = {
             .leftJoin(
                 'tennit_images',
                 'tennit_listings.user_id',
-                'tennit_images.user_id')
+                'tennit_images.user_id');
     },
     getListingById(knex, user_id){
         return knex
@@ -19,7 +19,7 @@ const ListingsService = {
                 'tennit_listings.user_id',
                 'tennit_images.user_id')
             .where('tennit_listings.user_id',user_id)
-            .first()
+            .first();
     },
     insertNewListing(knex, newListing){
         return knex
@@ -27,29 +27,29 @@ const ListingsService = {
             .into('tennit_listings')
             .returning('*')
             .then(rows=>{
-                return rows[0]
+                return rows[0];
             })
     },
     getSearchResults(listings, province, city, rent){
         if(!!province){
             listings = listings.filter(filter=>
                 filter.province.toLowerCase().includes(province.toLowerCase())    
-            )
+            );
         }
         if(!!city){
             listings = listings.filter(filter=>
                 filter.city.toLowerCase().includes(city.toLowerCase())    
-            )
+            );
         }
         if(!!rent){
             listings = listings.filter(filter=>
                 Number(filter.rent) <= Number(rent)
-            )
+            );
         }
         if(listings.length > 0){
-            return listings
+            return listings;
         }else{
-            return {error: {message: 'Search returned empty.'}}
+            return { error: { message: 'Search returned empty.' }};
         }
     },
     updateListing(knex, user_id, newListingFields){
@@ -58,8 +58,8 @@ const ListingsService = {
             .update(newListingFields)
             .returning('*')
             .then(rows=>{
-                return rows[0]
-            })
+                return rows[0];
+        });
     },
     serializeListing(newListing){
         return {
@@ -77,8 +77,8 @@ const ListingsService = {
             listing: newListing.listing,
             userblurb: xss(newListing.userblurb),
             blurb: xss(newListing.blurb),
-        }
+        };
     }
 }
 
-module.exports = ListingsService
+module.exports = ListingsService;
