@@ -49,7 +49,7 @@ const ListingsService = {
         if(listings.length > 0){
             return listings;
         }else{
-            return { error: { message: 'Search returned empty.' }};
+            return [];
         }
     },
     updateListing(knex, user_id, newListingFields){
